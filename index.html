@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+<html>
+   <head>
+      <title>Mask detection</title>
+      <script type = "text/javascript">
+          function displayImage() {
+              document.getElementById("img").src = image;
+          }
+
+          function startTimer() {
+              setInterval(displayImage, 1000);
+          }
+
+          var image = "https://myprojecttestbucket.s3.amazonaws.com/peopleWithBoundingBoxed.jpg";
+      </script>
+   </head>
+
+   <body onload = "startTimer()">
+       <img id="img" src="https://myprojecttestbucket.s3.amazonaws.com/peopleWithBoundingBoxed.jpg"/>
+       <button type="button" onclick="displayImage()">Update</button>
+   </body>
+</html>
