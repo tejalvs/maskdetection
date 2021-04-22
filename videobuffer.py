@@ -5,6 +5,8 @@ import boto3
 import math
 from time import sleep
 
+index = 0
+
 def showBoundingBoxPositionsForEachPerson(imageHeight, imageWidth, box, img): 
     left = imageWidth * box['Left']
     top = imageHeight * box['Top']
@@ -42,10 +44,12 @@ def extractFaceDetails(bodyPart):
     return box,confidence,maskStatus
 
 def putImageInBucket():
+    global index
     s3Bucket = boto3.client('s3', region_name='us-east-1')
-    s3Bucket.upload_file("peopleWithBoundingBoxed.jpg", "wegmansmaskdetection", "peopleWithBoundingBoxes.jpg")
+    s3Bucket.upload_file("peopleWithBoundingBoxed"+str(index)+".jpg", "wegmansmaskdetection", "peopleWithBoundingBoxes"+str(index)+".jpg")
 
 def captureImage():
+    global index
     video_url = 'https://www.youtube.com/watch?v=oIBERbq2tLA'
 
     ydl_opts = {}
@@ -79,7 +83,7 @@ def captureImage():
                                 print(faceBoxDetails,faceCoverConfidence,maskStatus)
                                 if(faceBoxDetails!= None):
                                     frame = showBoundingBoxPositionForFace(h,w,faceBoxDetails,frame,faceCoverConfidence,maskStatus)
-                    cv2.imwrite("peopleWithBoundingBoxed.jpg", frame)
+                    cv2.imwrite("peopleWithBoundingBoxed"+str(index)+".jpg", frame)
                     putImageInBucket()
             cap.release()
 
