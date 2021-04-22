@@ -86,7 +86,6 @@ def captureImage():
                         )
                     for i in range(len(response['Persons'])):
                         person = response['Persons'][i]
-                        print(person)
                         h, w, c = frame.shape
                         frame = showBoundingBoxPositionsForEachPerson(h,w,person["BoundingBox"],frame)
                         for i in range(len(person["BodyParts"])):
