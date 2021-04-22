@@ -40,7 +40,7 @@ def extractFaceDetails(bodyPart):
             box = equipement["BoundingBox"]
             if( CoversBodyPart in equipement and "Confidence" in equipement["CoversBodyPart"]):
                 confidence = equipement["CoversBodyPart"]["Confidence"]
-                maskStatus = equipement"CoversBodyPart"]["Value"]
+                maskStatus = equipement["CoversBodyPart"]["Value"]
     return box,confidence,maskStatus
 
 def putImageInBucket():
