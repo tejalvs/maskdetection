@@ -16,7 +16,6 @@ def showBoundingBoxPositionsForEachPerson(imageHeight, imageWidth, box, img):
     return img
 
 def showBoundingBoxPositionForFace(imageHeight, imageWidth, box, img, confidence ,maskStatus):
-    print("inside draw box",imageHeight, imageWidth, box, img, confidence ,maskStatus)
     left = imageWidth * box['Left']
     top = imageHeight * box['Top']
     start_point = (int(left), int(top))
@@ -32,7 +31,6 @@ def showBoundingBoxPositionForFace(imageHeight, imageWidth, box, img, confidence
     return img
 
 def extractFaceDetails(bodyPart):
-    print(bodyPart)
     confidence = 0.0
     maskStatus = False
     box = None
@@ -83,7 +81,7 @@ def captureImage():
                             bodyPart = person["BodyParts"][i]
                             if("Name" in bodyPart and bodyPart["Name"] == "FACE"):
                                 faceBoxDetails,faceCoverConfidence,maskStatus = extractFaceDetails(bodyPart)
-                                print(faceBoxDetails,faceCoverConfidence,maskStatus)
+                                print("maskworn? ",maskStatus)
                                 if(faceBoxDetails!= None):
                                     frame = showBoundingBoxPositionForFace(h,w,faceBoxDetails,frame,faceCoverConfidence,maskStatus)
                     cv2.imwrite("peopleWithBoundingBoxed.jpg", frame)
