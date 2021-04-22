@@ -10,9 +10,9 @@ def showBoundingBoxPositionsForEachPerson(imageHeight, imageWidth, box, img, mas
     top = imageHeight * box['Top']
     start_point = (int(left), int(top))
     end_point = (math.ceil(left + (imageWidth*box['Width'])), math.ceil(top + (imageHeight*box['Height'])))
-    if(maskStatus == "true"):
+    if(maskStatus == "True"):
         color = (0, 0, 255)
-    elif(maskStatus == "false"):
+    elif(maskStatus == "False"):
         color = (0, 255, 0)
     else:
         color = (255, 0, 0)
@@ -28,10 +28,10 @@ def showBoundingBoxPositionForFace(imageHeight, imageWidth, box, img ,maskStatus
     top = imageHeight * box['Top']
     start_point = (int(left), int(top))
     end_point = (math.ceil(left + (imageWidth*box['Width'])), math.ceil(top + (imageHeight*box['Height'])))
-    if(maskStatus == "true"):
-        color = (0, 0, 255)
-    else:
+    if(maskStatus == "True"):
         color = (0, 255, 0)
+    else:
+        color = (0, 0, 255)
     print(maskStatus,color)
     thickness = 1
     img = cv2.rectangle(img,start_point, end_point,color,thickness)
@@ -46,7 +46,7 @@ def extractFaceDetails(bodyPart):
             box = equipement["BoundingBox"]
             if( "CoversBodyPart" in equipement and "Confidence" in equipement["CoversBodyPart"]):
                 confidence = equipement["CoversBodyPart"]["Confidence"]
-                maskStatus = equipement["CoversBodyPart"]["Value"]
+                maskStatus = str(equipement["CoversBodyPart"]["Value"])
     return box,confidence,maskStatus
 
 def putImageInBucket():
