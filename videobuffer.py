@@ -43,7 +43,7 @@ def extractFaceDetails(bodyPart):
 
 def putImageInBucket():
     s3Bucket = boto3.client('s3', region_name='us-east-1')
-    s3Bucket.upload_file("peopleWithBoundingBoxed.jpg", "myprojecttestbucket", "peopleWithBoundingBoxed.jpg")
+    s3Bucket.upload_file("peopleWithBoundingBoxed.jpg", "wegmansmaskdetection", "peopleWithBoundingBoxes.jpg")
 
 def captureImage():
     video_url = 'https://www.youtube.com/watch?v=oIBERbq2tLA'
