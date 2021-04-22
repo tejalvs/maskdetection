@@ -38,7 +38,7 @@ def extractFaceDetails(bodyPart):
     if( "EquipmentDetections" in bodyPart):
         for equipement in bodyPart["EquipmentDetections"]:
             box = equipement["BoundingBox"]
-            if( CoversBodyPart in equipement and "Confidence" in equipement["CoversBodyPart"]):
+            if( "CoversBodyPart" in equipement and "Confidence" in equipement["CoversBodyPart"]):
                 confidence = equipement["CoversBodyPart"]["Confidence"]
                 maskStatus = equipement["CoversBodyPart"]["Value"]
     return box,confidence,maskStatus
