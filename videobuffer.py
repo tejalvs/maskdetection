@@ -16,6 +16,7 @@ def showBoundingBoxPositionsForEachPerson(imageHeight, imageWidth, box, img):
     return img
 
 def showBoundingBoxPositionForFace(imageHeight, imageWidth, box, img, confidence ,maskStatus):
+    print("inside draw box",imageHeight, imageWidth, box, img, confidence ,maskStatus)
     left = imageWidth * box['Left']
     top = imageHeight * box['Top']
     start_point = (int(left), int(top))
