@@ -92,6 +92,6 @@ def captureImage():
     cv2.destroyAllWindows()
 
 if __name__ == '__main__':
-    while(True):
-        captureImage()
+#     while(True):
+    captureImage()
 #         sleep(1)
