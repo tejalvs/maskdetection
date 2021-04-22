@@ -11,9 +11,9 @@ def showBoundingBoxPositionsForEachPerson(imageHeight, imageWidth, box, img, mas
     start_point = (int(left), int(top))
     end_point = (math.ceil(left + (imageWidth*box['Width'])), math.ceil(top + (imageHeight*box['Height'])))
     if(maskStatus == "True"):
-        color = (0, 0, 255)
+        color = (0, 255 , 0)
     elif(maskStatus == "False"):
-        color = (0, 255, 0)
+        color = (0, 0 , 255)
     else:
         color = (255, 0, 0)
     thickness = 2
@@ -29,9 +29,9 @@ def showBoundingBoxPositionForFace(imageHeight, imageWidth, box, img ,maskStatus
     start_point = (int(left), int(top))
     end_point = (math.ceil(left + (imageWidth*box['Width'])), math.ceil(top + (imageHeight*box['Height'])))
     if(maskStatus == "True"):
-        color = (0, 0, 255)
+        color = (0, 255 , 0)
     else:
-        color = (0, 255, 0)
+        color = (0, 0 , 255)
     print(maskStatus,color)
     thickness = 1
     img = cv2.rectangle(img,start_point, end_point,color,thickness)
@@ -39,7 +39,7 @@ def showBoundingBoxPositionForFace(imageHeight, imageWidth, box, img ,maskStatus
 
 def extractFaceDetails(bodyPart):
     confidence = 0.0
-    maskStatus = False
+    maskStatus = "False"
     box = None
     if( "EquipmentDetections" in bodyPart):
         for equipement in bodyPart["EquipmentDetections"]:
