@@ -29,9 +29,9 @@ def showBoundingBoxPositionForFace(imageHeight, imageWidth, box, img ,maskStatus
     start_point = (int(left), int(top))
     end_point = (math.ceil(left + (imageWidth*box['Width'])), math.ceil(top + (imageHeight*box['Height'])))
     if(maskStatus == "True"):
-        color = (0, 255, 0)
-    else:
         color = (0, 0, 255)
+    else:
+        color = (0, 255, 0)
     print(maskStatus,color)
     thickness = 1
     img = cv2.rectangle(img,start_point, end_point,color,thickness)
@@ -89,7 +89,7 @@ def captureImage():
                             bodyPart = person["BodyParts"][i]
                             if("Name" in bodyPart and bodyPart["Name"] == "FACE"):
                                 faceBoxDetails,faceCoverConfidence,maskStatus = extractFaceDetails(bodyPart)
-                                print("maskworn? ",maskStatus,faceBoxDetails)
+                                print("maskworn? "+ maskStatus,faceBoxDetails)
                                 if(faceBoxDetails!= None):
                                     frame = showBoundingBoxPositionForFace(h,w,faceBoxDetails,frame,maskStatus)
                         frame = showBoundingBoxPositionsForEachPerson(h,w,person["BoundingBox"],frame,maskStatus,faceCoverConfidence)
