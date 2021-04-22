@@ -89,10 +89,9 @@ def captureImage():
                     cv2.imwrite("peopleWithBoundingBoxed.jpg", frame)
                     putImageInBucket()
             cap.release()
-
     cv2.destroyAllWindows()
 
 if __name__ == '__main__':
     while(True):
         captureImage()
-        sleep(1)
+#         sleep(1)
