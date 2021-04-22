@@ -50,7 +50,11 @@ def captureImage():
 
     ydl_opts = {}
     ydl = youtube_dl.YoutubeDL(ydl_opts)
-    info_dict = ydl.extract_info(video_url, download=False)
+    try:
+        ydl.cache.remove()
+        info_dict = ydl.extract_info(video_url, download=False)
+    except youtube_dl.DownloadError as error:
+        pass
     formats = info_dict.get('formats',None)
     for f in formats:
         if(f["height"] == 720):
