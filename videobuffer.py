@@ -31,6 +31,7 @@ def showBoundingBoxPositionForFace(imageHeight, imageWidth, box, img, confidence
     return img
 
 def extractFaceDetails(bodyPart):
+    print(bodyPart)
     confidence = 0.0
     maskStatus = False
     box = None
