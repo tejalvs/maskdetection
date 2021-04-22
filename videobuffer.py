@@ -91,9 +91,6 @@ def captureImage():
     cv2.destroyAllWindows()
 
 if __name__ == '__main__':
-#     while(True):
-#         captureImage()
-#         sleep(1)
-    bodyPart = {'Name': 'FACE', 'Confidence': 94.63019561767578, 'EquipmentDetections': [{'BoundingBox': {'Width': 0.021624954417347908, 'Height': 0.04056299477815628, 'Left': 0.004337030928581953, 'Top': 0.6144181489944458}, 'Confidence': 97.91883850097656, 'Type': 'FACE_COVER', 'CoversBodyPart': {'Confidence': 99.0463638305664, 'Value': True}}]}
-    faceBoxDetails,faceCoverConfidence,maskStatus = extractFaceDetails(bodyPart)
-    print(faceBoxDetails,faceCoverConfidence,maskStatus)
+    while(True):
+        captureImage()
+        sleep(1)
