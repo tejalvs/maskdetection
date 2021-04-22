@@ -27,7 +27,7 @@ def showBoundingBoxPositionForFace(imageHeight, imageWidth, box, img, confidence
     thickness = 1
     fScale = round(min([imageWidth,imageHeight])/25)
     img = cv2.rectangle(img,start_point, end_point,color,thickness)
-    img = cv2.putText(img, "Confidence :"+ str(round(confidence,1))+"%", start_point, cv2.FONT_HERSHEY_SIMPLEX, fScale, (0,0,0), thickness, cv2.LINE_AA)
+    img = cv2.putText(img, "Confidence :"+ str(round(confidence,1))+"%", start_point, cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), thickness, cv2.LINE_AA)
     return img
 
 def extractFaceDetails(bodyPart):
