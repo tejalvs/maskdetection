@@ -15,6 +15,16 @@ def showBoundingBoxPositionsForEachPerson(imageHeight, imageWidth, box, img):
     img = cv2.rectangle(img,start_point, end_point,color,thickness)
     return img
 
+def showBoundingBoxPositionsForHead(imageHeight, imageWidth, box, img): 
+    left = imageWidth * box['Left']
+    top = imageHeight * box['Top']
+    start_point = (int(left), int(top))
+    end_point = (math.ceil(left + (imageWidth*box['Width'])), math.ceil(top + (imageHeight*box['Height'])))
+    color = (255, 0, 0)
+    thickness = 2
+    img = cv2.rectangle(img,start_point, end_point,color,thickness)
+    return img
+
 def showBoundingBoxPositionForFace(imageHeight, imageWidth, box, img, confidence ,maskStatus):
     left = imageWidth * box['Left']
     top = imageHeight * box['Top']
@@ -86,6 +96,10 @@ def captureImage():
                                 print("maskworn? ",maskStatus,faceBoxDetails)
                                 if(faceBoxDetails!= None):
                                     frame = showBoundingBoxPositionForFace(h,w,faceBoxDetails,frame,faceCoverConfidence,maskStatus)
+                            elif("Name" in bodyPart and bodyPart["Name"] == "HEAD"):
+                                headBoxDetails,headCoverConfidence,headStatus = extractFaceDetails(bodyPart)
+                                if(headBoxDetails!= None):
+                                    frame = showBoundingBoxPositionsForHead(h,w,headBoxDetails,frame)
                     cv2.imwrite("peopleWithBoundingBoxed.jpg", frame)
                     putImageInBucket()
             cap.release()
