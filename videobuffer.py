@@ -88,4 +88,4 @@ def captureImage():
 if __name__ == '__main__':
     while(True):
         captureImage()
-        sleep(0.3)
+        sleep(0.5)
