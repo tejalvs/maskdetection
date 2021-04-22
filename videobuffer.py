@@ -43,7 +43,7 @@ def extractFaceDetails(bodyPart):
 
 def putImageInBucket():
     s3Bucket = boto3.client('s3', region_name='us-east-1')
-    s3Bucket.upload_file("images/peopleWithBoundingBoxed.jpg", "myprojecttestbucket", "peopleWithBoundingBoxed.jpg")
+    s3Bucket.upload_file("peopleWithBoundingBoxed.jpg", "myprojecttestbucket", "peopleWithBoundingBoxed.jpg")
 
 def captureImage():
     video_url = 'https://www.youtube.com/watch?v=oIBERbq2tLA'
@@ -79,7 +79,7 @@ def captureImage():
                                 print(faceBoxDetails,faceCoverConfidence,maskStatus)
                                 if(faceBoxDetails!= None):
                                     frame = showBoundingBoxPositionForFace(h,w,faceBoxDetails,frame,faceCoverConfidence,maskStatus)
-                    cv2.imwrite("images/peopleWithBoundingBoxed.jpg", frame)
+                    cv2.imwrite("peopleWithBoundingBoxed.jpg", frame)
                     putImageInBucket()
             cap.release()
 
