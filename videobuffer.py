@@ -35,7 +35,7 @@ def extractFaceDetails(bodyPart):
     confidence = 0.0
     maskStatus = False
     box = None
-    print("EquipmentDetections" in bodyPart,"BoundingBox" in bodyPart["EquipmentDetections"])
+    print(bodyPart["EquipmentDetections"].keys())
     if( "EquipmentDetections" in bodyPart and "BoundingBox" in bodyPart["EquipmentDetections"]):
         box = bodyPart["EquipmentDetections"]["BoundingBox"]
         if( CoversBodyPart in bodyPart["EquipmentDetections"] and "Confidence" in bodyPart["EquipmentDetections"]["CoversBodyPart"]):
