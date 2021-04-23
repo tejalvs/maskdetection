@@ -68,7 +68,41 @@ def saveImagesOfPeopleWithoutMasks(peopleArray):
     for i in range(len(peopleArray)):
         fName = peopleArray[i]
         s3Bucket.upload_file(fName, "wegmansmaskdetection", "peoplewithoutmask/"+str(round(endTime))+"/person"+str(i)+".jpg")
-    
+
+def createDDBtable():
+    if not dynamodb:
+        dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.create_table(
+        TableName='NotWornMask',
+        KeySchema=[
+            {
+                'AttributeName': 'time',
+                'KeyType': 'HASH'  # Partition key
+            }
+        ],
+        AttributeDefinitions=[
+            {
+                'AttributeName': 'time',
+                'AttributeType': 'N'
+            },
+            {
+                'AttributeName': 'percentageOfPeopleNotWearinMask',
+                'AttributeType': 'S'
+            },
+            {
+                'AttributeName': 'imagesOfPeople',
+                'AttributeType': 'L'
+            }
+
+        ],
+        ProvisionedThroughput={
+            'ReadCapacityUnits': 10,
+            'WriteCapacityUnits': 10
+        }
+    )
+    return table
+
+
 def captureImage(checkAndSaveMasks):
     video_url = 'https://www.youtube.com/watch?v=oIBERbq2tLA'
     ydl_opts = {}
@@ -125,7 +159,9 @@ def captureImage(checkAndSaveMasks):
     cv2.destroyAllWindows()
 
 if __name__ == '__main__':
-    while(True):
+    ddTable = createDDBtable()
+    print(ddTable.creation_date_time)
+    while(False):
         startTime = time.time()
         if(round(startTime)-previousSavedTime>10):
             checkAndSaveMasks = True
