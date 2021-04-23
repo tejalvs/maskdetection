@@ -75,8 +75,9 @@ def saveImagesOfPeopleWithoutMasks(peopleArray,percentOfPeopleWithoutMasks):
         location = "peoplewithoutmask/"+str(round(endTime))+"/person"+str(i)+".jpg"
         imagesOfPeopleNotWearingMask.append(location)
         s3Bucket.upload_file(fName, s3BucketNameForIndividualImages, location)
-    respo = putNotWornMaskPeopleInDB(endTime,round(percentOfPeopleWithoutMasks,2),imagesOfPeopleNotWearingMask,s3BucketNameForIndividualImages)
-    print(respo)
+    if(len(imagesOfPeopleNotWearingMask) > 0):
+        respo = putNotWornMaskPeopleInDB(endTime,round(percentOfPeopleWithoutMasks,2),imagesOfPeopleNotWearingMask,s3BucketNameForIndividualImages)
+        print(respo)
 
 def createDDBtable():
     dynamodb = boto3.client('dynamodb', region_name='us-east-1')
@@ -113,7 +114,7 @@ def putNotWornMaskPeopleInDB(time, percentOfPeopleWithoutMasks, imagesPaths, s3B
        Item={
             'time': time,
             's3BucketName' : s3BucketName,
-            'ratioOfPeopleWithoutMasks': ratioOfPeopleWithoutMasks,
+            'percentOfPeopleWithoutMasks': percentOfPeopleWithoutMasks,
             'imagesPaths': imagesPaths
         }
     )
