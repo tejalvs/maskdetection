@@ -189,7 +189,7 @@ def captureImage(checkAndSaveMasks):
         if (len(peopleWithoutMasks)/len(response['Persons'])) >= 0.5 :
             safe = False
         saveImagesOfPeopleWithoutMasks(peopleWithoutMasks,len(peopleWithoutMasks)/len(response['Persons'])*100)
-    changeBackgroundColour(frame,safe,precentageOfPeopleNotWearingMask)
+    frame = changeBackgroundColour(frame,safe,precentageOfPeopleNotWearingMask)
     cv2.imwrite("peopleWithBoundingBoxes.jpg", frame)
     peopleWithoutMasks = []
     cv2.destroyAllWindows()
