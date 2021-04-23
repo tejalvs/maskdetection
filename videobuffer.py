@@ -9,6 +9,8 @@ startTime = 0
 endTime = 0
 timeDiff = 0
 momentum = 0
+previousSavedTime = 0
+checkAndSaveMasks = True
 
 def showBoundingBoxPositionsForEachPerson(imageHeight, imageWidth, box, img, maskStatus, confidence): 
     left = imageWidth * box['Left']
@@ -58,11 +60,12 @@ def putImageInBucket():
     s3Bucket.upload_file("peopleWithBoundingBoxed.jpg", "wegmansmaskdetection", "peopleWithBoundingBoxes.jpg")
 
 def saveImagesOfPeopleWithoutMasks(peopleArray):
-    global startTime,endTime
+    global startTime,endTime,checkAndSaveMasks,previousSavedTime
     s3Bucket = boto3.client('s3', region_name='us-east-1')
     endTime = time.time()
     if(len(peopleArray)>0):
-        checkAndSaveMasks = False
+        checkAndSaveMasks == False
+        previousSavedTime = round(startTime)
     for i in range(len(peopleArray)):
         fName = peopleArray[i]
         s3Bucket.upload_file(fName, "wegmansmaskdetection", "peoplewithoutmask/"+str(round(endTime))+"/person"+str(i)+".jpg")
@@ -123,16 +126,12 @@ def captureImage(checkAndSaveMasks):
     cv2.destroyAllWindows()
 
 if __name__ == '__main__':
-    previousSavedTime = 0
-    checkAndSaveMasks = True
     while(True):
         startTime = time.time()
         if(round(startTime)-previousSavedTime>10):
             checkAndSaveMasks = True
         print(checkAndSaveMasks,round(startTime)-previousSavedTime)
         captureImage(checkAndSaveMasks)
-        if(checkAndSaveMasks == False):
-            previousSavedTime = round(startTime)
         timeDiff = endTime-startTime
         timeDiff = round(timeDiff,2)
         hyperParam = 0.2
