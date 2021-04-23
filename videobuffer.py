@@ -97,7 +97,8 @@ def captureImage(checkAndSaveMasks):
                             bodyPart = person["BodyParts"][i]
                             if("Name" in bodyPart and bodyPart["Name"] == "FACE"):
                                 faceBoxDetails,faceCoverConfidence,maskStatus = extractFaceDetails(bodyPart)
-                                print("maskworn? "+ maskStatus,faceBoxDetails)
+                                print("maskworn? "+ maskStatus,faceBoxDetails != None)
+                                print(checkAndSaveMasks , maskStatus == "False", checkAndSaveMasks and maskStatus == "False")
                                 if(checkAndSaveMasks and maskStatus == "False"):
                                     left = imageWidth * person["BoundingBox"]['Left']
                                     top = imageHeight * person["BoundingBox"]['Top']
