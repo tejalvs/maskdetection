@@ -90,7 +90,7 @@ def createDDBtable():
             },
             {
                 'AttributeName': 'imagesOfPeople',
-                'AttributeType': 'L'
+                'AttributeType': 'S'
             }
 
         ],
