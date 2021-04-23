@@ -128,8 +128,8 @@ def changeBackgroundColour(img,safe,precentageOfPeopleNotWearingMask):
         color = (0,0,255)
     cv2.rectangle(base,(0,0),(w+30,h+30),color,30)
     base[15:h+15,15:w+15]=img
-    textLocation = (10, h)
-    base = cv2.putText(base, "Percentage People Not Wearing Masks :"+ str(round(precentageOfPeopleNotWearingMask*100,2))+"%", \
+    textLocation = (15, h)
+    base = cv2.putText(base, "People Not Wearing Mask: "+ str(round(precentageOfPeopleNotWearingMask,2))+"%", \
                        textLocation, cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1, cv2.LINE_AA)
     return base
 
@@ -189,7 +189,7 @@ def captureImage(checkAndSaveMasks):
         if (len(peopleWithoutMasks)/len(response['Persons'])) >= 0.5 :
             safe = False
         saveImagesOfPeopleWithoutMasks(peopleWithoutMasks,len(peopleWithoutMasks)/len(response['Persons'])*100)
-    frame = changeBackgroundColour(frame,safe,precentageOfPeopleNotWearingMask)
+    frame = changeBackgroundColour(frame,safe,precentageOfPeopleNotWearingMask*100)
     cv2.imwrite("peopleWithBoundingBoxes.jpg", frame)
     peopleWithoutMasks = []
     cv2.destroyAllWindows()
