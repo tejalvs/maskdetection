@@ -100,8 +100,8 @@ def captureImage(checkAndSaveMasks):
                                 print("maskworn? "+ maskStatus,faceBoxDetails != None)
                                 print(checkAndSaveMasks , maskStatus == "False", checkAndSaveMasks and maskStatus == "False")
                                 if(checkAndSaveMasks and maskStatus == "False"):
-                                    left = imageWidth * person["BoundingBox"]['Left']
-                                    top = imageHeight * person["BoundingBox"]['Top']
+                                    left = w * person["BoundingBox"]['Left']
+                                    top = h * person["BoundingBox"]['Top']
                                     height = h*person["BoundingBox"]['Height']
                                     width = w*person["BoundingBox"]['Width']
                                     crop_img = img[left:left+height, top:top+width]
