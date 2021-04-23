@@ -64,19 +64,19 @@ def putImageInBucket():
     s3Bucket.upload_file("peopleWithBoundingBoxes.jpg", s3BucketNameForFullImage, "peopleWithBoundingBoxes.jpg")
 
 def saveImagesOfPeopleWithoutMasks(peopleArray,percentOfPeopleWithoutMasks):
-    global startTime,endTime,previousSavedTime,s3BucketNameForIndividualImages
+    global previousSavedTime,s3BucketNameForIndividualImages
     s3Bucket = boto3.client('s3', region_name='us-east-1')
-    endTime = time.time()
+    currTime = time.time()
     imagesOfPeopleNotWearingMask = []
     previousSavedTime = round(startTime)
     for i in range(len(peopleArray)):
         fName = peopleArray[i]
-        location = "peoplewithoutmask/"+str(round(endTime))+"/person"+str(i)+".jpg"
+        location = "peoplewithoutmask/"+str(round(currTime))+"/person"+str(i)+".jpg"
         imagesOfPeopleNotWearingMask.append(location)
         s3Bucket.upload_file(fName, s3BucketNameForIndividualImages, location)
     if(len(imagesOfPeopleNotWearingMask) > 0):
-        print(round(endTime),round(percentOfPeopleWithoutMasks),imagesOfPeopleNotWearingMask,s3BucketNameForIndividualImages)
-        respo = putNotWornMaskPeopleInDB(round(endTime),round(percentOfPeopleWithoutMasks),imagesOfPeopleNotWearingMask,s3BucketNameForIndividualImages)
+        print(round(currTime),round(percentOfPeopleWithoutMasks),imagesOfPeopleNotWearingMask,s3BucketNameForIndividualImages)
+        respo = putNotWornMaskPeopleInDB(round(currTime),round(percentOfPeopleWithoutMasks),imagesOfPeopleNotWearingMask,s3BucketNameForIndividualImages)
         print(respo)
 
 def createDDBtable():
@@ -185,6 +185,7 @@ if __name__ == '__main__':
         else:
             checkAndSaveMasks = False
         captureImage(checkAndSaveMasks)
+        endTime = time.time()
         timeDiff = endTime-startTime
         timeDiff = round(timeDiff,2)
         print(timeDiff,momentum,startTime,endTime)
