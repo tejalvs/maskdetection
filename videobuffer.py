@@ -71,12 +71,12 @@ def saveImagesOfPeopleWithoutMasks(peopleArray):
 
 def createDDBtable():
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
-    table_name = 'NotWornMask'
-    existing_tables = dynamodb_client.list_tables()['TableNames']
+    tableName = 'NotWornMask'
+    existingTables = dynamodb.list_tables()['TableNames']
     table = None
-    if table_name not in existing_tables:
+    if tableName not in existingTables:
         table = dynamodb.create_table(
-            TableName=table_name,
+            TableName=tableName,
             KeySchema=[
                 {
                     'AttributeName': 'time',
@@ -95,7 +95,7 @@ def createDDBtable():
             }
         )
     else:
-        print("Table already exists")
+        print("Table "+tableName+" already exists")
     return table
 
 
