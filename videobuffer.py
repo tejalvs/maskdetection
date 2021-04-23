@@ -151,7 +151,7 @@ def captureImage(checkAndSaveMasks):
 if __name__ == '__main__':
     ddTable = createDDBtable()
     print(ddTable.creation_date_time)
-    while(False):
+    while(True):
         startTime = time.time()
         if(round(startTime)-previousSavedTime>10):
             checkAndSaveMasks = True
