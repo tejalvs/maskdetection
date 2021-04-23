@@ -3,7 +3,7 @@ import numpy as np
 import youtube_dl
 import boto3
 import math
-from time import sleep
+import time
 
 def showBoundingBoxPositionsForEachPerson(imageHeight, imageWidth, box, img, maskStatus, confidence): 
     left = imageWidth * box['Left']
@@ -53,9 +53,15 @@ def putImageInBucket():
     s3Bucket = boto3.client('s3', region_name='us-east-1')
     s3Bucket.upload_file("peopleWithBoundingBoxed.jpg", "wegmansmaskdetection", "peopleWithBoundingBoxes.jpg")
 
-def captureImage():
+def peopleWithoutMasks(peopleArray):
+    s3Bucket = boto3.client('s3', region_name='us-east-1')
+    saveTime = time.time()
+    for i in range(len(peopleArray)):
+        fName = peopleArray[i]
+        s3Bucket.upload_file(fName, "wegmansmaskdetection", "/peoplewithoutmask/"+saveTime+"/"+i+".jpg")
+    
+def captureImage(checkAndSaveMasks):
     video_url = 'https://www.youtube.com/watch?v=oIBERbq2tLA'
-
     ydl_opts = {}
     ydl = youtube_dl.YoutubeDL(ydl_opts)
     try:
@@ -70,6 +76,7 @@ def captureImage():
             cap = cv2.VideoCapture(url)
             ret, videoFrame = cap.read()
             frame = videoFrame.copy()
+            peopleWithoutMasks = []
             if ret:
                 hasFrame, imageBytes = cv2.imencode(".jpg", frame)
                 if hasFrame:
@@ -90,15 +97,32 @@ def captureImage():
                             if("Name" in bodyPart and bodyPart["Name"] == "FACE"):
                                 faceBoxDetails,faceCoverConfidence,maskStatus = extractFaceDetails(bodyPart)
                                 print("maskworn? "+ maskStatus,faceBoxDetails)
+                                if(checkAndSaveMasks and maskStatus == "False"):
+                                    left = imageWidth * person["BoundingBox"]['Left']
+                                    top = imageHeight * person["BoundingBox"]['Top']
+                                    height = h*person["BoundingBox"]['Height']
+                                    width = w*person["BoundingBox"]['Width']))
+                                    if(maskStatus == "True"):
+                                    crop_img = img[left:left+height, top:top+width]
+                                    cv2.imwrite("person"+str(i)+".jpg", frame)
+                                    peopleWithoutMasks.append("person"+str(i)+".jpg")
                                 if(faceBoxDetails!= None):
                                     frame = showBoundingBoxPositionForFace(h,w,faceBoxDetails,frame,maskStatus)
                         frame = showBoundingBoxPositionsForEachPerson(h,w,person["BoundingBox"],frame,maskStatus,faceCoverConfidence)
                     cv2.imwrite("peopleWithBoundingBoxed.jpg", frame)
-                    putImageInBucket()
             cap.release()
+    putImageInBucket()
+    saveImagesOfPeopleWithoutMasks(peopleWithoutMasks)
     cv2.destroyAllWindows()
 
 if __name__ == '__main__':
+    previousSavedTime = 0
+    checkAndSaveMasks = True
     while(True):
-        captureImage()
-        sleep(1)
+        seconds = time.time()
+        if(previousSavedTime-seconds>10):
+            seconds = previousSavedTime
+            checkAndSaveMasks = True
+        captureImage(checkAndSaveMasks)
+        time.sleep(1)
+        checkAndSaveMasks = False
