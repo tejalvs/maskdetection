@@ -59,7 +59,7 @@ def saveImagesOfPeopleWithoutMasks(peopleArray):
     for i in range(len(peopleArray)):
         fName = peopleArray[i]
         s3Bucket.upload_file(fName, "wegmansmaskdetection", "/peoplewithoutmask/"+saveTime+"/"+i+".jpg")
-     print("Saved people not wearing mask")
+    print("Saved people not wearing mask")
     
 def captureImage(checkAndSaveMasks):
     video_url = 'https://www.youtube.com/watch?v=oIBERbq2tLA'
