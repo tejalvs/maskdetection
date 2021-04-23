@@ -70,7 +70,7 @@ def saveImagesOfPeopleWithoutMasks(peopleArray):
         s3Bucket.upload_file(fName, "wegmansmaskdetection", "peoplewithoutmask/"+str(round(endTime))+"/person"+str(i)+".jpg")
 
 def createDDBtable():
-    dynamodb = boto3.resource('dynamodb')
+    dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
     table = dynamodb.create_table(
         TableName='NotWornMask',
         KeySchema=[
