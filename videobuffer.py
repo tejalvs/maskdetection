@@ -55,10 +55,10 @@ def putImageInBucket():
 
 def saveImagesOfPeopleWithoutMasks(peopleArray):
     s3Bucket = boto3.client('s3', region_name='us-east-1')
-    saveTime = time.time()
+    saveTime = round(time.time())
     for i in range(len(peopleArray)):
         fName = peopleArray[i]
-        s3Bucket.upload_file(fName, "wegmansmaskdetection", "/peoplewithoutmask/"+str(saveTime)+"/"+str(i)+".jpg")
+        s3Bucket.upload_file(fName, "wegmansmaskdetection", "peoplewithoutmask/"+str(saveTime)+"/person"+str(i)+".jpg")
         print("Saved people not wearing mask")
     
 def captureImage(checkAndSaveMasks):
@@ -104,6 +104,7 @@ def captureImage(checkAndSaveMasks):
                                     top = math.ceil(h * person["BoundingBox"]['Top'])
                                     height = math.ceil(h*person["BoundingBox"]['Height'])
                                     width = math.ceil(w*person["BoundingBox"]['Width'])
+                                    print(left,left+height,top,top+width)
                                     crop_img = frame[left:left+height, top:top+width]
                                     cv2.imwrite("person"+str(i)+".jpg", frame)
                                     peopleWithoutMasks.append("person"+str(i)+".jpg")
@@ -113,6 +114,7 @@ def captureImage(checkAndSaveMasks):
                     cv2.imwrite("peopleWithBoundingBoxed.jpg", frame)
             cap.release()
     putImageInBucket()
+    print(peopleWithoutMasks)
     saveImagesOfPeopleWithoutMasks(peopleWithoutMasks)
     cv2.destroyAllWindows()
 
