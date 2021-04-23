@@ -118,6 +118,20 @@ def putNotWornMaskPeopleInDB(time, percentOfPeopleWithoutMasks, imagesPaths, s3B
     )
     return response
 
+def changeBackgroundColour(img,safe,precentageOfPeopleNotWearingMask):
+    h,w=img.shape[0:2]
+    base_size=h+20,w+20,3
+    base=np.zeros(base_size,dtype=np.uint8)
+    if(safe):
+        color = (0,255,0)
+    else:
+        color = (0,0,255)
+    cv2.rectangle(base,(0,0),(w+20,h+20),color,30)
+    base[10:h+10,10:w+10]=img
+    base = cv2.putText(base, "Percentage People Not Wearing Masks :"+ str(round(precentageOfPeopleNotWearingMask,2))+"%", textLocation, cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 1, cv2.LINE_AA)
+    return base
+)
+
 def captureImage(checkAndSaveMasks):
     video_url = 'https://www.youtube.com/watch?v=oIBERbq2tLA'
     ydl_opts = {}
@@ -165,11 +179,17 @@ def captureImage(checkAndSaveMasks):
                                 if(faceBoxDetails!= None):
                                     frame = showBoundingBoxPositionForFace(h,w,faceBoxDetails,frame,maskStatus)
                         frame = showBoundingBoxPositionsForEachPerson(h,w,person["BoundingBox"],frame,maskStatus,faceCoverConfidence)
-                    cv2.imwrite("peopleWithBoundingBoxes.jpg", frame)
             cap.release()
     putImageInBucket()
+    safe = True
+    precentageOfPeopleNotWearingMask = 0
     if(len(peopleWithoutMasks) > 0):
+        precentageOfPeopleNotWearingMask = (len(peopleWithoutMasks)/len(response['Persons'])
+        if((len(peopleWithoutMasks)/len(response['Persons']))>=0.5):
+            safe = False
         saveImagesOfPeopleWithoutMasks(peopleWithoutMasks,len(peopleWithoutMasks)/len(response['Persons'])*100)
+    changeBackgroundColour(frame,safe,precentageOfPeopleNotWearingMask)
+    cv2.imwrite("peopleWithBoundingBoxes.jpg", frame)
     peopleWithoutMasks = []
     cv2.destroyAllWindows()
 
