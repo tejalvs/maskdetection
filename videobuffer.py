@@ -91,7 +91,7 @@ def createDDBtable():
                 'WriteCapacityUnits': 10
             }
         )
-    except dynamodb_client.exceptions.ResourceInUseException:
+    except dynamodb.exceptions.ResourceInUseException:
         print("Table already exist")
     return table
 
