@@ -68,8 +68,7 @@ def saveImagesOfPeopleWithoutMasks(peopleArray,percentOfPeopleWithoutMasks):
     s3Bucket = boto3.client('s3', region_name='us-east-1')
     endTime = time.time()
     imagesOfPeopleNotWearingMask = []
-    if(len(peopleArray)>0):
-        previousSavedTime = round(startTime)
+    previousSavedTime = round(startTime)
     for i in range(len(peopleArray)):
         fName = peopleArray[i]
         location = "peoplewithoutmask/"+str(round(endTime))+"/person"+str(i)+".jpg"
@@ -171,7 +170,8 @@ def captureImage(checkAndSaveMasks):
                     cv2.imwrite("peopleWithBoundingBoxes.jpg", frame)
             cap.release()
     putImageInBucket()
-    saveImagesOfPeopleWithoutMasks(peopleWithoutMasks,len(peopleWithoutMasks)/len(response['Persons'])*100)
+    if(len(peopleWithoutMasks) > 0):
+        saveImagesOfPeopleWithoutMasks(peopleWithoutMasks,len(peopleWithoutMasks)/len(response['Persons'])*100)
     peopleWithoutMasks = []
     cv2.destroyAllWindows()
 
