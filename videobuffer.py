@@ -125,15 +125,15 @@ if __name__ == '__main__':
     checkAndSaveMasks = True
     while(True):
         startTime = time.time()
-        if(previousSavedTime-round(startTime)>0):
+        if(previousSavedTime-round(startTime)>10):
             previousSavedTime = round(startTime)
             checkAndSaveMasks = False
         captureImage(checkAndSaveMasks)
         timeDiff = endTime-startTime
         timeDiff = round(timeDiff,2)
-        hyperParam = 0.1
+        hyperParam = 0.4
         momentum = (hyperParam * momentum) + ((1 - hyperParam) * round(timeDiff,1))
         momentum = round(momentum,2)
         print(timeDiff,momentum)
-        time.sleep(momentum)
         checkAndSaveMasks = True
+        time.sleep(momentum)
