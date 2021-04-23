@@ -123,7 +123,7 @@ if __name__ == '__main__':
         seconds = time.time()
         if(previousSavedTime-seconds>0):
             seconds = previousSavedTime
-            checkAndSaveMasks = True
+            checkAndSaveMasks = False
         captureImage(checkAndSaveMasks)
         time.sleep(1)
-        checkAndSaveMasks = False
+        checkAndSaveMasks = True
