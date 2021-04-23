@@ -127,10 +127,10 @@ def changeBackgroundColour(img,safe,precentageOfPeopleNotWearingMask):
     else:
         color = (0,0,255)
     cv2.rectangle(base,(0,0),(w+20,h+20),color,30)
-    base[10:h+10,10:w+10]=img
-    textLocation = (0, h)
-    base = cv2.putText(base, "Percentage People Not Wearing Masks :"+ str(round(precentageOfPeopleNotWearingMask,2))+"%", \
-                       textLocation, cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 1, cv2.LINE_AA)
+    base[15:h+5,15:w+5]=img
+    textLocation = (10, h)
+    base = cv2.putText(base, "Percentage People Not Wearing Masks :"+ str(round(precentageOfPeopleNotWearingMask*100,2))+"%", \
+                       textLocation, cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1, cv2.LINE_AA)
     return base
 
 def captureImage(checkAndSaveMasks):
