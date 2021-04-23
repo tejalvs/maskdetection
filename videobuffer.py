@@ -7,6 +7,8 @@ import time
 
 startTime = 0
 endTime = 0
+timeDiff = 0
+momentum = 0
 
 def showBoundingBoxPositionsForEachPerson(imageHeight, imageWidth, box, img, maskStatus, confidence): 
     left = imageWidth * box['Left']
@@ -35,7 +37,6 @@ def showBoundingBoxPositionForFace(imageHeight, imageWidth, box, img ,maskStatus
         color = (0, 255 , 0)
     else:
         color = (0, 0 , 255)
-    print(maskStatus,color)
     thickness = 1
     img = cv2.rectangle(img,start_point, end_point,color,thickness)
     return img
@@ -63,8 +64,6 @@ def saveImagesOfPeopleWithoutMasks(peopleArray):
     for i in range(len(peopleArray)):
         fName = peopleArray[i]
         s3Bucket.upload_file(fName, "wegmansmaskdetection", "peoplewithoutmask/"+str(round(endTime))+"/person"+str(i)+".jpg")
-        print("Saved people not wearing mask")
-    print(startTime,endTime,endTime-startTime)
     
 def captureImage(checkAndSaveMasks):
     video_url = 'https://www.youtube.com/watch?v=oIBERbq2tLA'
@@ -103,14 +102,12 @@ def captureImage(checkAndSaveMasks):
                             if("Name" in bodyPart and bodyPart["Name"] == "FACE"):
                                 faceBoxDetails,faceCoverConfidence,maskStatus = extractFaceDetails(bodyPart)
                                 print("maskworn? "+ maskStatus,faceBoxDetails != None)
-                                print(checkAndSaveMasks , maskStatus == "False", checkAndSaveMasks and maskStatus == "False")
                                 if(checkAndSaveMasks and maskStatus == "False"):
                                     left = math.ceil(w * person["BoundingBox"]['Left'])
                                     top = math.ceil(h * person["BoundingBox"]['Top'])
                                     height = math.ceil(h*person["BoundingBox"]['Height'])
                                     width = math.ceil(w*person["BoundingBox"]['Width'])
                                     crop_img = videoFrame[top:top+height, left:left+width]
-                                    print(left,left+height, top,top+width)
                                     cv2.imwrite("person"+str(i)+".jpg", crop_img)
                                     peopleWithoutMasks.append("person"+str(i)+".jpg")
                                 if(faceBoxDetails!= None):
@@ -119,7 +116,6 @@ def captureImage(checkAndSaveMasks):
                     cv2.imwrite("peopleWithBoundingBoxed.jpg", frame)
             cap.release()
     putImageInBucket()
-    print(peopleWithoutMasks)
     saveImagesOfPeopleWithoutMasks(peopleWithoutMasks)
     peopleWithoutMasks = []
     cv2.destroyAllWindows()
@@ -133,7 +129,9 @@ if __name__ == '__main__':
             previousSavedTime = round(startTime)
             checkAndSaveMasks = False
         captureImage(checkAndSaveMasks)
-        print("going to sleep",startTime,endTime)
-        time.sleep(5)
-        print("back from sleep",startTime,endTime)
+        timeDiff = endTime-startTime
+        beta_1 = 0.1
+        m = beta_1 * m + (1 - beta_1) * round(timeDiff,1)
+        print(timeDiff,m)
+        time.sleep(m)
         checkAndSaveMasks = True
