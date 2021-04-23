@@ -100,10 +100,10 @@ def captureImage(checkAndSaveMasks):
                                 print("maskworn? "+ maskStatus,faceBoxDetails != None)
                                 print(checkAndSaveMasks , maskStatus == "False", checkAndSaveMasks and maskStatus == "False")
                                 if(checkAndSaveMasks and maskStatus == "False"):
-                                    left = w * person["BoundingBox"]['Left']
-                                    top = h * person["BoundingBox"]['Top']
-                                    height = h*person["BoundingBox"]['Height']
-                                    width = w*person["BoundingBox"]['Width']
+                                    left = math.ceil(w * person["BoundingBox"]['Left'])
+                                    top = math.ceil(h * person["BoundingBox"]['Top'])
+                                    height = math.ceil(h*person["BoundingBox"]['Height'])
+                                    width = math.ceil(w*person["BoundingBox"]['Width'])
                                     crop_img = frame[left:left+height, top:top+width]
                                     cv2.imwrite("person"+str(i)+".jpg", frame)
                                     peopleWithoutMasks.append("person"+str(i)+".jpg")
