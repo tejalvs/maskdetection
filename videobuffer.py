@@ -75,9 +75,7 @@ def saveImagesOfPeopleWithoutMasks(peopleArray,percentOfPeopleWithoutMasks):
         imagesOfPeopleNotWearingMask.append(location)
         s3Bucket.upload_file(fName, s3BucketNameForIndividualImages, location)
     if(len(imagesOfPeopleNotWearingMask) > 0):
-        print(round(currTime),round(percentOfPeopleWithoutMasks),imagesOfPeopleNotWearingMask,s3BucketNameForIndividualImages)
         respo = putNotWornMaskPeopleInDB(round(currTime),round(percentOfPeopleWithoutMasks),imagesOfPeopleNotWearingMask,s3BucketNameForIndividualImages)
-        print(respo)
 
 def createDDBtable():
     dynamodb = boto3.client('dynamodb', region_name='us-east-1')
@@ -156,7 +154,6 @@ def captureImage(checkAndSaveMasks):
                             bodyPart = person["BodyParts"][i]
                             if("Name" in bodyPart and bodyPart["Name"] == "FACE"):
                                 faceBoxDetails,faceCoverConfidence,maskStatus = extractFaceDetails(bodyPart)
-                                print("maskworn? "+ maskStatus,faceBoxDetails != None)
                                 if(checkAndSaveMasks and maskStatus == "False"):
                                     left = math.ceil(w * person["BoundingBox"]['Left'])
                                     top = math.ceil(h * person["BoundingBox"]['Top'])
@@ -188,7 +185,7 @@ if __name__ == '__main__':
         endTime = time.time()
         timeDiff = endTime-startTime
         timeDiff = round(timeDiff,2)
-        print(timeDiff,momentum,startTime,endTime)
+        print(timeDiff,momentum)
         hyperParam = 0.2
         momentum = (hyperParam * momentum) + ((1 - hyperParam) * round(timeDiff,1))
         momentum = round(momentum,2)
