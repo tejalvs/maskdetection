@@ -179,8 +179,6 @@ def captureImage(checkAndSaveMasks):
                                     peopleWithoutMasks.append("person"+str(i)+".jpg")
                                 if(faceBoxDetails!= None):
                                     frame = showBoundingBoxPositionForFace(h,w,faceBoxDetails,frame,maskStatus)
-                        if(faceCoverConfidence==0):
-                            print(person["BodyParts"])
                         frame = showBoundingBoxPositionsForEachPerson(h,w,person["BoundingBox"],frame,maskStatus,faceCoverConfidence)
             cap.release()
     putImageInBucket()
