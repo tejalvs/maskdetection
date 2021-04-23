@@ -132,6 +132,6 @@ if __name__ == '__main__':
         timeDiff = endTime-startTime
         hyperParam = 0.1
         momentum = (hyperParam * momentum) + ((1 - hyperParam) * round(timeDiff,1))
-        print(timeDiff,hyperParam)
-        time.sleep(m)
+        print(timeDiff,momentum)
+        time.sleep(momentum)
         checkAndSaveMasks = True
