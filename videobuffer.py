@@ -28,7 +28,7 @@ def showBoundingBoxPositionsForEachPerson(imageHeight, imageWidth, box, img, mas
         color = (0, 255, 255)
     thickness = 1
     img = cv2.rectangle(img,start_point, end_point,color,thickness)
-    textLocation = (math.ceil(left, int(top))
+    textLocation = (math.ceil(left), int(top))
     if(int(confidence)>1):
         img = cv2.putText(img, "Confidence :"+ str(round(confidence,1))+"%", textLocation, cv2.FONT_HERSHEY_SIMPLEX, 0.3, color, 1, cv2.LINE_AA)
     return img
