@@ -4,8 +4,10 @@ import youtube_dl
 import boto3
 import math
 import time
+
 startTime = 0
 endTime = 0
+
 def showBoundingBoxPositionsForEachPerson(imageHeight, imageWidth, box, img, maskStatus, confidence): 
     left = imageWidth * box['Left']
     top = imageHeight * box['Top']
@@ -123,7 +125,6 @@ def captureImage(checkAndSaveMasks):
     cv2.destroyAllWindows()
 
 if __name__ == '__main__':
-    global startTime
     previousSavedTime = 0
     checkAndSaveMasks = True
     while(True):
