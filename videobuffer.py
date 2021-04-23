@@ -133,5 +133,7 @@ if __name__ == '__main__':
             previousSavedTime = round(startTime)
             checkAndSaveMasks = False
         captureImage(checkAndSaveMasks)
+        print("going to sleep")
         time.sleep(1)
+        print("back from sleep")
         checkAndSaveMasks = True
