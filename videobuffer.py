@@ -28,7 +28,7 @@ def showBoundingBoxPositionsForEachPerson(imageHeight, imageWidth, box, img, mas
         color = (0, 255, 255)
     thickness = 1
     img = cv2.rectangle(img,start_point, end_point,color,thickness)
-    textLocation = (math.ceil(left + (imageWidth*box['Width'])), int(top))
+    textLocation = (math.ceil(left, int(top))
     if(int(confidence)>1):
         img = cv2.putText(img, "Confidence :"+ str(round(confidence,1))+"%", textLocation, cv2.FONT_HERSHEY_SIMPLEX, 0.3, color, 1, cv2.LINE_AA)
     return img
@@ -185,11 +185,11 @@ def captureImage(checkAndSaveMasks):
     safe = True
     precentageOfPeopleNotWearingMask = 0
     if(len(peopleWithoutMasks) > 0):
-        precentageOfPeopleNotWearingMask = (len(peopleWithoutMasks)/len(response['Persons']))
+        precentageOfPeopleNotWearingMask = (len(peopleWithoutMasks)/len(response['Persons']))*100
         if (len(peopleWithoutMasks)/len(response['Persons'])) >= 0.5 :
             safe = False
         saveImagesOfPeopleWithoutMasks(peopleWithoutMasks,len(peopleWithoutMasks)/len(response['Persons'])*100)
-    frame = changeBackgroundColour(frame,safe,precentageOfPeopleNotWearingMask*100)
+    frame = changeBackgroundColour(frame,safe,precentageOfPeopleNotWearingMask)
     cv2.imwrite("peopleWithBoundingBoxes.jpg", frame)
     peopleWithoutMasks = []
     cv2.destroyAllWindows()
