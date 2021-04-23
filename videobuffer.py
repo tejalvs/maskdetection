@@ -71,25 +71,28 @@ def saveImagesOfPeopleWithoutMasks(peopleArray):
 
 def createDDBtable():
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
-    table = dynamodb.create_table(
-        TableName='NotWornMask',
-        KeySchema=[
-            {
-                'AttributeName': 'time',
-                'KeyType': 'HASH'  # Partition key
+    try:
+        table = dynamodb.create_table(
+            TableName='NotWornMask',
+            KeySchema=[
+                {
+                    'AttributeName': 'time',
+                    'KeyType': 'HASH'  # Partition key
+                }
+            ],
+            AttributeDefinitions=[
+                {
+                    'AttributeName': 'time',
+                    'AttributeType': 'N'
+                }
+            ],
+            ProvisionedThroughput={
+                'ReadCapacityUnits': 10,
+                'WriteCapacityUnits': 10
             }
-        ],
-        AttributeDefinitions=[
-            {
-                'AttributeName': 'time',
-                'AttributeType': 'N'
-            }
-        ],
-        ProvisionedThroughput={
-            'ReadCapacityUnits': 10,
-            'WriteCapacityUnits': 10
-        }
-    )
+        )
+    except dynamodb_client.exceptions.ResourceInUseException:
+        print("Table already exist")
     return table
 
 
