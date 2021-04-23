@@ -134,6 +134,6 @@ if __name__ == '__main__':
             checkAndSaveMasks = False
         captureImage(checkAndSaveMasks)
         print("going to sleep")
-        time.sleep(1)
+        time.sleep(2)
         print("back from sleep")
         checkAndSaveMasks = True
