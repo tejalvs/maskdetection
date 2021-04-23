@@ -130,7 +130,6 @@ def changeBackgroundColour(img,safe,precentageOfPeopleNotWearingMask):
     base[10:h+10,10:w+10]=img
     base = cv2.putText(base, "Percentage People Not Wearing Masks :"+ str(round(precentageOfPeopleNotWearingMask,2))+"%", textLocation, cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 1, cv2.LINE_AA)
     return base
-)
 
 def captureImage(checkAndSaveMasks):
     video_url = 'https://www.youtube.com/watch?v=oIBERbq2tLA'
