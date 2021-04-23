@@ -130,8 +130,8 @@ if __name__ == '__main__':
             checkAndSaveMasks = False
         captureImage(checkAndSaveMasks)
         timeDiff = endTime-startTime
-        beta_1 = 0.1
-        m = beta_1 * m + (1 - beta_1) * round(timeDiff,1)
+        hyperParam = 0.1
+        momentum = beta_1 * hyperParam + (1 - hyperParam) * round(timeDiff,1)
         print(timeDiff,m)
         time.sleep(m)
         checkAndSaveMasks = True
