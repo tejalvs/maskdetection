@@ -79,10 +79,6 @@ def createDDBtable():
                 'KeyType': 'HASH'  # Partition key
             },
             {
-                'AttributeName': 'percentageOfPeopleNotWearinMask',
-                'KeyType': 'RANGE'  # Sort key
-            },
-            {
                 'AttributeName': 'imagesOfPeople',
                 'KeyType': 'RANGE'  # Sort key
             }
