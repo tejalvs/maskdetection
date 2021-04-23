@@ -75,6 +75,7 @@ def saveImagesOfPeopleWithoutMasks(peopleArray,percentOfPeopleWithoutMasks):
         imagesOfPeopleNotWearingMask.append(location)
         s3Bucket.upload_file(fName, s3BucketNameForIndividualImages, location)
     if(len(imagesOfPeopleNotWearingMask) > 0):
+        print(round(endTime),round(percentOfPeopleWithoutMasks,2),imagesOfPeopleNotWearingMask,s3BucketNameForIndividualImages)
         respo = putNotWornMaskPeopleInDB(round(endTime),round(percentOfPeopleWithoutMasks,2),imagesOfPeopleNotWearingMask,s3BucketNameForIndividualImages)
         print(respo)
 
