@@ -130,6 +130,7 @@ if __name__ == '__main__':
             checkAndSaveMasks = False
         captureImage(checkAndSaveMasks)
         timeDiff = endTime-startTime
+        timeDiff = round(timeDiff,2)
         hyperParam = 0.1
         momentum = (hyperParam * momentum) + ((1 - hyperParam) * round(timeDiff,1))
         momentum = round(momentum,2)
