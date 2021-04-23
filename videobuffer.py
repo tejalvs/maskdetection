@@ -12,6 +12,9 @@ momentum = 0
 previousSavedTime = 0
 checkAndSaveMasks = True
 
+s3BucketNameForFullImage = "wegmansmaskdetection"
+s3BucketNameForIndividualImages = "wegmansmaskdetection"
+
 def showBoundingBoxPositionsForEachPerson(imageHeight, imageWidth, box, img, maskStatus, confidence): 
     left = imageWidth * box['Left']
     top = imageHeight * box['Top']
@@ -56,18 +59,24 @@ def extractFaceDetails(bodyPart):
     return box,confidence,maskStatus
 
 def putImageInBucket():
+    global s3BucketNameForFullImage,s3BucketNameForFullImage
     s3Bucket = boto3.client('s3', region_name='us-east-1')
-    s3Bucket.upload_file("peopleWithBoundingBoxed.jpg", "wegmansmaskdetection", "peopleWithBoundingBoxes.jpg")
+    s3Bucket.upload_file("peopleWithBoundingBoxes.jpg", s3BucketNameForFullImage, "peopleWithBoundingBoxes.jpg")
 
-def saveImagesOfPeopleWithoutMasks(peopleArray):
-    global startTime,endTime,previousSavedTime
+def saveImagesOfPeopleWithoutMasks(peopleArray,percentOfPeopleWithoutMasks):
+    global startTime,endTime,previousSavedTime,s3BucketNameForIndividualImages
     s3Bucket = boto3.client('s3', region_name='us-east-1')
     endTime = time.time()
+    imagesOfPeopleNotWearingMask = []
     if(len(peopleArray)>0):
         previousSavedTime = round(startTime)
     for i in range(len(peopleArray)):
         fName = peopleArray[i]
-        s3Bucket.upload_file(fName, "wegmansmaskdetection", "peoplewithoutmask/"+str(round(endTime))+"/person"+str(i)+".jpg")
+        location = "peoplewithoutmask/"+str(round(endTime))+"/person"+str(i)+".jpg"
+        imagesOfPeopleNotWearingMask.append(location)
+        s3Bucket.upload_file(fName, s3BucketNameForIndividualImages, location)
+    respo = putNotWornMaskPeopleInDB(endTime,round(percentOfPeopleWithoutMasks,2),imagesOfPeopleNotWearingMask,s3BucketNameForIndividualImages)
+    print(respo)
 
 def createDDBtable():
     dynamodb = boto3.client('dynamodb', region_name='us-east-1')
@@ -95,6 +104,20 @@ def createDDBtable():
         )
     else:
         print("Table "+tableName+" already exists")
+
+def putNotWornMaskPeopleInDB(time, percentOfPeopleWithoutMasks, imagesPaths, s3BucketName, dynamodb=None):
+    if not dynamodb:
+        dynamodb = boto3.client('dynamodb', region_name='us-east-1')
+    table = dynamodb.Table('NotWornMask')
+    response = table.put_item(
+       Item={
+            'time': time,
+            's3BucketName' : s3BucketName,
+            'ratioOfPeopleWithoutMasks': ratioOfPeopleWithoutMasks,
+            'imagesPaths': imagesPaths
+        }
+    )
+    return response
 
 def captureImage(checkAndSaveMasks):
     video_url = 'https://www.youtube.com/watch?v=oIBERbq2tLA'
@@ -144,10 +167,10 @@ def captureImage(checkAndSaveMasks):
                                 if(faceBoxDetails!= None):
                                     frame = showBoundingBoxPositionForFace(h,w,faceBoxDetails,frame,maskStatus)
                         frame = showBoundingBoxPositionsForEachPerson(h,w,person["BoundingBox"],frame,maskStatus,faceCoverConfidence)
-                    cv2.imwrite("peopleWithBoundingBoxed.jpg", frame)
+                    cv2.imwrite("peopleWithBoundingBoxes.jpg", frame)
             cap.release()
     putImageInBucket()
-    saveImagesOfPeopleWithoutMasks(peopleWithoutMasks)
+    saveImagesOfPeopleWithoutMasks(peopleWithoutMasks,len(peopleWithoutMasks)/len(response['Persons'])*100)
     peopleWithoutMasks = []
     cv2.destroyAllWindows()
 
