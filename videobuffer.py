@@ -61,6 +61,8 @@ def saveImagesOfPeopleWithoutMasks(peopleArray):
     global startTime,endTime
     s3Bucket = boto3.client('s3', region_name='us-east-1')
     endTime = time.time()
+    if(len(peopleArray)>0):
+        checkAndSaveMasks = False
     for i in range(len(peopleArray)):
         fName = peopleArray[i]
         s3Bucket.upload_file(fName, "wegmansmaskdetection", "peoplewithoutmask/"+str(round(endTime))+"/person"+str(i)+".jpg")
@@ -125,15 +127,16 @@ if __name__ == '__main__':
     checkAndSaveMasks = True
     while(True):
         startTime = time.time()
-        if(previousSavedTime-round(startTime)>10):
-            previousSavedTime = round(startTime)
-            checkAndSaveMasks = False
+        if(round(startTime)-previousSavedTime>10):
+            checkAndSaveMasks = True
+        print(checkAndSaveMasks,round(startTime)-previousSavedTime)
         captureImage(checkAndSaveMasks)
+        if(checkAndSaveMasks == False):
+            previousSavedTime = round(startTime)
         timeDiff = endTime-startTime
         timeDiff = round(timeDiff,2)
         hyperParam = 0.4
         momentum = (hyperParam * momentum) + ((1 - hyperParam) * round(timeDiff,1))
         momentum = round(momentum,2)
         print(timeDiff,momentum)
-        checkAndSaveMasks = True
         time.sleep(momentum)
