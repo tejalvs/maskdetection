@@ -77,30 +77,13 @@ def createDDBtable():
             {
                 'AttributeName': 'time',
                 'KeyType': 'HASH'  # Partition key
-            },
-            {
-                'AttributeName': 'percentageOfPeopleNotWearinMask',
-                'KeyType': 'RANGE'  # Sort key
-            },
-            {
-                'AttributeName': 'imagesOfPeople',
-                'KeyType': 'RANGE'  # Sort key
             }
         ],
         AttributeDefinitions=[
             {
                 'AttributeName': 'time',
                 'AttributeType': 'N'
-            },
-            {
-                'AttributeName': 'percentageOfPeopleNotWearinMask',
-                'AttributeType': 'S'
-            },
-            {
-                'AttributeName': 'imagesOfPeople',
-                'AttributeType': 'S'
             }
-
         ],
         ProvisionedThroughput={
             'ReadCapacityUnits': 10,
