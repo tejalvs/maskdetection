@@ -107,7 +107,7 @@ def createDDBtable():
 
 def putNotWornMaskPeopleInDB(time, percentOfPeopleWithoutMasks, imagesPaths, s3BucketName, dynamodb=None):
     if not dynamodb:
-        dynamodb = boto3.client('dynamodb', region_name='us-east-1')
+        dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
     table = dynamodb.Table('NotWornMask')
     response = table.put_item(
        Item={
