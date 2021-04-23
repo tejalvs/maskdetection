@@ -4,7 +4,8 @@ import youtube_dl
 import boto3
 import math
 import time
-
+startTime = 0
+endTime = 0
 def showBoundingBoxPositionsForEachPerson(imageHeight, imageWidth, box, img, maskStatus, confidence): 
     left = imageWidth * box['Left']
     top = imageHeight * box['Top']
@@ -54,12 +55,14 @@ def putImageInBucket():
     s3Bucket.upload_file("peopleWithBoundingBoxed.jpg", "wegmansmaskdetection", "peopleWithBoundingBoxes.jpg")
 
 def saveImagesOfPeopleWithoutMasks(peopleArray):
+    global startTime,endTime
     s3Bucket = boto3.client('s3', region_name='us-east-1')
-    saveTime = round(time.time())
+    endTime = time.time()
     for i in range(len(peopleArray)):
         fName = peopleArray[i]
-        s3Bucket.upload_file(fName, "wegmansmaskdetection", "peoplewithoutmask/"+str(saveTime)+"/person"+str(i)+".jpg")
+        s3Bucket.upload_file(fName, "wegmansmaskdetection", "peoplewithoutmask/"+str(round(endTime))+"/person"+str(i)+".jpg")
         print("Saved people not wearing mask")
+    print(startTime,endTime,endTime-startTime)
     
 def captureImage(checkAndSaveMasks):
     video_url = 'https://www.youtube.com/watch?v=oIBERbq2tLA'
@@ -104,7 +107,7 @@ def captureImage(checkAndSaveMasks):
                                     top = math.ceil(h * person["BoundingBox"]['Top'])
                                     height = math.ceil(h*person["BoundingBox"]['Height'])
                                     width = math.ceil(w*person["BoundingBox"]['Width'])
-                                    crop_img = frame[top:top+height, left:left+width]
+                                    crop_img = videoFrame[top:top+height, left:left+width]
                                     print(left,left+height, top,top+width)
                                     cv2.imwrite("person"+str(i)+".jpg", crop_img)
                                     peopleWithoutMasks.append("person"+str(i)+".jpg")
@@ -120,12 +123,13 @@ def captureImage(checkAndSaveMasks):
     cv2.destroyAllWindows()
 
 if __name__ == '__main__':
+    global startTime
     previousSavedTime = 0
     checkAndSaveMasks = True
     while(True):
-        seconds = time.time()
-        if(previousSavedTime-seconds>0):
-            seconds = previousSavedTime
+        startTime = time.time()
+        if(previousSavedTime-round(startTime)>0):
+            previousSavedTime = round(startTime)
             checkAndSaveMasks = False
         captureImage(checkAndSaveMasks)
         time.sleep(1)
