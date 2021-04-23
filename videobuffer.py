@@ -191,4 +191,5 @@ if __name__ == '__main__':
         hyperParam = 0.2
         momentum = (hyperParam * momentum) + ((1 - hyperParam) * round(timeDiff,1))
         momentum = round(momentum,2)
+        print(momentum)
         time.sleep(momentum)
