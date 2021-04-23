@@ -53,7 +53,7 @@ def putImageInBucket():
     s3Bucket = boto3.client('s3', region_name='us-east-1')
     s3Bucket.upload_file("peopleWithBoundingBoxed.jpg", "wegmansmaskdetection", "peopleWithBoundingBoxes.jpg")
 
-def peopleWithoutMasks(peopleArray):
+def saveImagesOfPeopleWithoutMasks(peopleArray):
     s3Bucket = boto3.client('s3', region_name='us-east-1')
     saveTime = time.time()
     for i in range(len(peopleArray)):
