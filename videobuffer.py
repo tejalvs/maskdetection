@@ -120,14 +120,14 @@ def putNotWornMaskPeopleInDB(time, percentOfPeopleWithoutMasks, imagesPaths, s3B
 
 def changeBackgroundColour(img,safe,precentageOfPeopleNotWearingMask):
     h,w=img.shape[0:2]
-    base_size=h+20,w+20,3
+    base_size=h+30,w+30,3
     base=np.zeros(base_size,dtype=np.uint8)
     if(safe):
         color = (0,255,0)
     else:
         color = (0,0,255)
-    cv2.rectangle(base,(0,0),(w+20,h+20),color,30)
-    base[15:h+5,15:w+5]=img
+    cv2.rectangle(base,(0,0),(w+30,h+30),color,30)
+    base[15:h+15,15:w+15]=img
     textLocation = (10, h)
     base = cv2.putText(base, "Percentage People Not Wearing Masks :"+ str(round(precentageOfPeopleNotWearingMask*100,2))+"%", \
                        textLocation, cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1, cv2.LINE_AA)
