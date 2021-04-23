@@ -16,7 +16,7 @@ def showBoundingBoxPositionsForEachPerson(imageHeight, imageWidth, box, img, mas
         color = (0, 0 , 255)
     else:
         color = (0, 255, 255)
-    thickness = 2
+    thickness = 1
     img = cv2.rectangle(img,start_point, end_point,color,thickness)
     textLocation = (math.ceil(left + (imageWidth*box['Width'])), int(top))
     if(int(confidence)>1):
