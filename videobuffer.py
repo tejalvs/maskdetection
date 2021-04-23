@@ -183,8 +183,8 @@ def captureImage(checkAndSaveMasks):
     safe = True
     precentageOfPeopleNotWearingMask = 0
     if(len(peopleWithoutMasks) > 0):
-        precentageOfPeopleNotWearingMask = (len(peopleWithoutMasks)/len(response['Persons'])
-        if((len(peopleWithoutMasks)/len(response['Persons'])>=0.5):
+        precentageOfPeopleNotWearingMask = (len(peopleWithoutMasks)/len(response['Persons']))
+        if (len(peopleWithoutMasks)/len(response['Persons'])) >= 0.5 :
             safe = False
         saveImagesOfPeopleWithoutMasks(peopleWithoutMasks,len(peopleWithoutMasks)/len(response['Persons'])*100)
     changeBackgroundColour(frame,safe,precentageOfPeopleNotWearingMask)
