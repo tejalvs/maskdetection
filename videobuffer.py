@@ -60,11 +60,10 @@ def putImageInBucket():
     s3Bucket.upload_file("peopleWithBoundingBoxed.jpg", "wegmansmaskdetection", "peopleWithBoundingBoxes.jpg")
 
 def saveImagesOfPeopleWithoutMasks(peopleArray):
-    global startTime,endTime,checkAndSaveMasks,previousSavedTime
+    global startTime,endTime,previousSavedTime
     s3Bucket = boto3.client('s3', region_name='us-east-1')
     endTime = time.time()
     if(len(peopleArray)>0):
-        checkAndSaveMasks == False
         previousSavedTime = round(startTime)
     for i in range(len(peopleArray)):
         fName = peopleArray[i]
@@ -130,6 +129,8 @@ if __name__ == '__main__':
         startTime = time.time()
         if(round(startTime)-previousSavedTime>10):
             checkAndSaveMasks = True
+        else:
+            checkAndSaveMasks = False
         print(checkAndSaveMasks,round(startTime)-previousSavedTime)
         captureImage(checkAndSaveMasks)
         timeDiff = endTime-startTime
