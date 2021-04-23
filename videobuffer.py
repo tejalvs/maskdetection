@@ -15,7 +15,7 @@ def showBoundingBoxPositionsForEachPerson(imageHeight, imageWidth, box, img, mas
     elif(maskStatus == "False"):
         color = (0, 0 , 255)
     else:
-        color = (255, 0, 0)
+        color = (0, 255, 255)
     thickness = 2
     img = cv2.rectangle(img,start_point, end_point,color,thickness)
     textLocation = (math.ceil(left + (imageWidth*box['Width'])), int(top))
@@ -71,13 +71,13 @@ def captureImage(checkAndSaveMasks):
     except youtube_dl.DownloadError as error:
         pass
     formats = info_dict.get('formats',None)
+    peopleWithoutMasks = []
     for f in formats:
         if(f["height"] == 720):
             url = f['url']
             cap = cv2.VideoCapture(url)
             ret, videoFrame = cap.read()
             frame = videoFrame.copy()
-            peopleWithoutMasks = []
             if ret:
                 hasFrame, imageBytes = cv2.imencode(".jpg", frame)
                 if hasFrame:
@@ -104,9 +104,8 @@ def captureImage(checkAndSaveMasks):
                                     top = math.ceil(h * person["BoundingBox"]['Top'])
                                     height = math.ceil(h*person["BoundingBox"]['Height'])
                                     width = math.ceil(w*person["BoundingBox"]['Width'])
-                                    print(left,left+height,top,top+width)
                                     crop_img = frame[left:left+height, top:top+width]
-                                    cv2.imwrite("person"+str(i)+".jpg", frame)
+                                    cv2.imwrite("person"+str(i)+".jpg", crop_img)
                                     peopleWithoutMasks.append("person"+str(i)+".jpg")
                                 if(faceBoxDetails!= None):
                                     frame = showBoundingBoxPositionForFace(h,w,faceBoxDetails,frame,maskStatus)
@@ -116,6 +115,7 @@ def captureImage(checkAndSaveMasks):
     putImageInBucket()
     print(peopleWithoutMasks)
     saveImagesOfPeopleWithoutMasks(peopleWithoutMasks)
+    peopleWithoutMasks = []
     cv2.destroyAllWindows()
 
 if __name__ == '__main__':
