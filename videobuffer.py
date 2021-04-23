@@ -73,7 +73,6 @@ def createDDBtable():
     dynamodb = boto3.client('dynamodb', region_name='us-east-1')
     tableName = 'NotWornMask'
     existingTables = dynamodb.list_tables()['TableNames']
-    table = None
     if tableName not in existingTables:
         table = dynamodb.create_table(
             TableName=tableName,
@@ -96,8 +95,6 @@ def createDDBtable():
         )
     else:
         print("Table "+tableName+" already exists")
-    return table
-
 
 def captureImage(checkAndSaveMasks):
     video_url = 'https://www.youtube.com/watch?v=oIBERbq2tLA'
@@ -155,8 +152,7 @@ def captureImage(checkAndSaveMasks):
     cv2.destroyAllWindows()
 
 if __name__ == '__main__':
-    ddTable = createDDBtable()
-    print(ddTable.creation_date_time)
+    createDDBtable()
     while(True):
         startTime = time.time()
         if(round(startTime)-previousSavedTime>10):
