@@ -21,7 +21,7 @@ def listAllSubscriptions():
   subscriptions = response["Subscriptions"]
   print(subscriptions)
 
-def getAllSubscriptionsByTopic(topicArn)
+def getAllSubscriptionsByTopic(topicArn):
   response = sns.list_subscriptions_by_topic(TopicArn=topicArn)
   subscriptions = response["Subscriptions"]
   print(subscriptions)
