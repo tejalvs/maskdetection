@@ -204,23 +204,19 @@ def captureImage(checkAndSaveMasks):
 if __name__ == '__main__':
     createDDBtable()
     while(True):
-        if(executionInProgress == False):
-            startTime = time.time()
-            if(round(startTime)-previousSavedTime>10):
-                checkAndSaveMasks = True
-            else:
-                checkAndSaveMasks = False
-            executionInProgress = True
-            captureImage(checkAndSaveMasks)
-            executionInProgress = False
-            endTime = time.time()
-            timeDiff = endTime-startTime
-            timeDiff = round(timeDiff,2)
-            print(timeDiff,momentum)
-            hyperParam = 0.2
-            momentum = (hyperParam * momentum) + ((1 - hyperParam) * round(timeDiff,1))
-            momentum = round(momentum,2)
-            time.sleep(momentum)
+        startTime = time.time()
+        if(round(startTime)-previousSavedTime>10):
+            checkAndSaveMasks = True
         else:
-            print("Did not finish execution")
-            time.sleep(0.1)
+            checkAndSaveMasks = False
+        executionInProgress = True
+        captureImage(checkAndSaveMasks)
+        executionInProgress = False
+        endTime = time.time()
+        timeDiff = endTime-startTime
+        timeDiff = round(timeDiff,2)
+        print(timeDiff,momentum)
+        hyperParam = 0.2
+        momentum = (hyperParam * momentum) + ((1 - hyperParam) * round(timeDiff,1))
+        momentum = round(momentum,2) + 0.3
+        time.sleep(momentum)
