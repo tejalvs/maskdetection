@@ -4,6 +4,7 @@ import youtube_dl
 import boto3
 import math
 import time
+from datetime import datetime
 
 startTime = 0
 endTime = 0
@@ -131,6 +132,11 @@ def changeBackgroundColour(img,safe,precentageOfPeopleNotWearingMask):
     textLocation = (15, h)
     base = cv2.putText(base, "People Not Wearing Mask: "+ str(round(precentageOfPeopleNotWearingMask,2))+"%", \
                        textLocation, cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1, cv2.LINE_AA)
+    now = datetime.now()
+    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+    timeLocation = (15, 15)
+    base = cv2.putText(base, str(dt_string), \
+                       timeLocation, cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1, cv2.LINE_AA)
     return base
 
 def captureImage(checkAndSaveMasks):
