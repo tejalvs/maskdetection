@@ -201,6 +201,7 @@ def captureImage(checkAndSaveMasks):
     putImageInBucket()
     peopleWithoutMasks = []
     cv2.destroyAllWindows()
+    print(len(peopleWithoutMasks))
     return (len(peopleWithoutMasks) == 0)
 
 if __name__ == '__main__':
