@@ -8,7 +8,7 @@ def createSNS(topicName):
                      region_name="us-east-1")
   response = sns.create_topic(Name=topicName)
   topicArn = response["TopicArn"]
-  return sns,topicArn
+  return topicArn
 
 def listAllTopics():
   global sns
