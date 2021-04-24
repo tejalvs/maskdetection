@@ -152,6 +152,7 @@ def captureImage(checkAndSaveMasks):
         pass
     formats = info_dict.get('formats',None)
     peopleWithoutMasks = []
+    numberOfPeopleWithNoMask = 0
     for f in formats:
         if(f["height"] == 720):
             url = f['url']
@@ -177,6 +178,8 @@ def captureImage(checkAndSaveMasks):
                             bodyPart = person["BodyParts"][i]
                             if("Name" in bodyPart and bodyPart["Name"] == "FACE"):
                                 faceBoxDetails,faceCoverConfidence,maskStatus = extractFaceDetails(bodyPart)
+                                if(maskStatus == "False"):
+                                    numberOfPeopleWithNoMask +=1
                                 if(checkAndSaveMasks and maskStatus == "False"):
                                     left = math.ceil(w * person["BoundingBox"]['Left'])
                                     top = math.ceil(h * person["BoundingBox"]['Top'])
@@ -192,17 +195,16 @@ def captureImage(checkAndSaveMasks):
     safe = True
     precentageOfPeopleNotWearingMask = 0
     if(len(peopleWithoutMasks) > 0):
-        precentageOfPeopleNotWearingMask = (len(peopleWithoutMasks)/len(response['Persons']))*100
         if (len(peopleWithoutMasks)/len(response['Persons'])) >= 0.5 :
             safe = False
         saveImagesOfPeopleWithoutMasks(peopleWithoutMasks,len(peopleWithoutMasks)/len(response['Persons'])*100)
+    precentageOfPeopleNotWearingMask = (numberOfPeopleWithNoMask/len(response['Persons']))*100
     frame = changeBackgroundColour(frame,safe,precentageOfPeopleNotWearingMask)
     cv2.imwrite("peopleWithBoundingBoxes.jpg", frame)
     putImageInBucket()
     peopleWithoutMasks = []
     cv2.destroyAllWindows()
-    print(len(peopleWithoutMasks))
-    return (len(peopleWithoutMasks) == 0)
+    return (numberOfPeopleWithNoMask == 0)
 
 if __name__ == '__main__':
     createDDBtable()
