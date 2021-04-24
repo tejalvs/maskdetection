@@ -222,4 +222,5 @@ if __name__ == '__main__':
             momentum = round(momentum,2)
             time.sleep(momentum)
         else:
+            print("Did not finish execution")
             time.sleep(0.1)
