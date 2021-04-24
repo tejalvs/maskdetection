@@ -187,7 +187,6 @@ def captureImage(checkAndSaveMasks):
                                     frame = showBoundingBoxPositionForFace(h,w,faceBoxDetails,frame,maskStatus)
                         frame = showBoundingBoxPositionsForEachPerson(h,w,person["BoundingBox"],frame,maskStatus,faceCoverConfidence)
             cap.release()
-    putImageInBucket()
     safe = True
     precentageOfPeopleNotWearingMask = 0
     if(len(peopleWithoutMasks) > 0):
@@ -197,6 +196,7 @@ def captureImage(checkAndSaveMasks):
         saveImagesOfPeopleWithoutMasks(peopleWithoutMasks,len(peopleWithoutMasks)/len(response['Persons'])*100)
     frame = changeBackgroundColour(frame,safe,precentageOfPeopleNotWearingMask)
     cv2.imwrite("peopleWithBoundingBoxes.jpg", frame)
+    putImageInBucket()
     peopleWithoutMasks = []
     cv2.destroyAllWindows()
 
