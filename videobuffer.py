@@ -12,7 +12,8 @@ timeDiff = 0
 momentum = 0
 previousSavedTime = 0
 checkAndSaveMasks = True
-executionInProgress = False
+avgTimeWhenEveyoneWearsMasks = 1.5
+avgTimeWhenEveryoneDoesntWearsMasks = 2.5
 
 s3BucketNameForFullImage = "wegmansmaskdetection"
 s3BucketNameForIndividualImages = "wegmansmaskdetection"
@@ -200,6 +201,7 @@ def captureImage(checkAndSaveMasks):
     putImageInBucket()
     peopleWithoutMasks = []
     cv2.destroyAllWindows()
+    return (len(peopleWithoutMasks) == 0)
 
 if __name__ == '__main__':
     createDDBtable()
@@ -209,14 +211,18 @@ if __name__ == '__main__':
             checkAndSaveMasks = True
         else:
             checkAndSaveMasks = False
-        executionInProgress = True
-        captureImage(checkAndSaveMasks)
-        executionInProgress = False
+        safetyStatus = captureImage(checkAndSaveMasks)
         endTime = time.time()
         timeDiff = endTime-startTime
         timeDiff = round(timeDiff,2)
-        print(timeDiff,momentum)
+        if(safetyStatus):
+            avgTimeWhenEveyoneWearsMasks += timeDiff
+            avgTimeWhenEveyoneWearsMasks = avgTimeWhenEveyoneWearsMasks/2
+        else:
+            avgTimeWhenEveryoneDoesntWearsMasks += timeDiff
+            avgTimeWhenEveryoneDoesntWearsMasks = avgTimeWhenEveryoneDoesntWearsMasks/2
+        print(timeDiff,momentum,avgTimeWhenEveyoneWearsMasks,avgTimeWhenEveryoneDoesntWearsMasks)
         hyperParam = 0.2
         momentum = (hyperParam * momentum) + ((1 - hyperParam) * round(timeDiff,1))
-        momentum = round(momentum,2) + 1
+        momentum = round(momentum,2) + (avgTimeWhenEveryoneDoesntWearsMasks-avgTimeWhenEveyoneWearsMasks)
         time.sleep(momentum)
