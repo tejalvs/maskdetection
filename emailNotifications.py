@@ -41,5 +41,6 @@ def publishMessage(topicArn):
 
 topicArn = createSNS("topicTest")
 listAllSubscriptions()
+createAnEmailSubscription()
 getAllSubscriptionsByTopic(topicArn)
 publishMessage(topicArn)
