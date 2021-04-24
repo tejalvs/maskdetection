@@ -1,22 +1,37 @@
 import boto3
 
-sns = boto3.client("sns", 
-                   region_name="us-east-1")
-response = sns.create_topic(Name="topic_name")
-topic_arn = response["TopicArn"]
+def createSNS(topicName):
+  sns = boto3.client("sns", 
+                     region_name="us-east-1")
+  response = sns.create_topic(Name=topicName)
+  topicArn = response["TopicArn"]
+  return 
 
-response = sns.list_topics()
-topics = response["Topics"]
+def listAllTopics():
+  response = sns.list_topics()
+  topics = response["Topics"]
+  print(topics)
 
-response = sns.subscribe(TopicArn=topic_arn, Protocol="email", Endpoint="ar4038@rit.edu")
-subscription_arn = response["SubscriptionArn"]
+def createAnEmailSubscription():
+  response = sns.subscribe(TopicArn=topic_arn, Protocol="email", Endpoint="ar4038@rit.edu")
+  subscription_arn = response["SubscriptionArn"]
 
-response = sns.list_subscriptions()
-subscriptions = response["Subscriptions"]
+def listAllSubscriptions():
+  response = sns.list_subscriptions()
+  subscriptions = response["Subscriptions"]
+  print(subscriptions)
 
-response = sns.list_subscriptions_by_topic(TopicArn=topic_arn)
-subscriptions = response["Subscriptions"]
+def getAllSubscriptionsByTopic(topicArn)
+  response = sns.list_subscriptions_by_topic(TopicArn=topicArn)
+  subscriptions = response["Subscriptions"]
+  print(subscriptions)
 
-sns.publish(TopicArn=topic_arn, 
-            Message="message text", 
-            Subject="subject used in emails only")
+def publishMessage(topicArn):
+  sns.publish(TopicArn=topicArn, 
+              Message="message text", 
+              Subject="subject used in emails only")
+
+topicArn = createSNS("topicTest")
+listAllSubscriptions()
+getAllSubscriptionsByTopic(topicArn)
+publishMessage(topicArn)
