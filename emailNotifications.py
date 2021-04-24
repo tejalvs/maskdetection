@@ -14,7 +14,7 @@ def listAllTopics():
   global sns
   response = sns.list_topics()
   topics = response["Topics"]
-  print(topics)
+  print("topics ",topics)
 
 def createAnEmailSubscription(topicArn):
   global sns
@@ -25,13 +25,13 @@ def listAllSubscriptions():
   global sns
   response = sns.list_subscriptions()
   subscriptions = response["Subscriptions"]
-  print(subscriptions)
+  print("all subscriptions",subscriptions)
 
 def getAllSubscriptionsByTopic(topicArn):
   global sns
   response = sns.list_subscriptions_by_topic(TopicArn=topicArn)
   subscriptions = response["Subscriptions"]
-  print(subscriptions)
+  print("all subscriptions by topic",subscriptions)
 
 def publishMessage(topicArn):
   global sns
@@ -41,6 +41,6 @@ def publishMessage(topicArn):
 
 topicArn = createSNS("topicTest")
 listAllSubscriptions()
-createAnEmailSubscription(topicArn)
+# createAnEmailSubscription(topicArn)
 getAllSubscriptionsByTopic(topicArn)
 publishMessage(topicArn)
