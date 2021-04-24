@@ -16,9 +16,9 @@ def listAllTopics():
   topics = response["Topics"]
   print(topics)
 
-def createAnEmailSubscription():
+def createAnEmailSubscription(topicArn):
   global sns
-  response = sns.subscribe(TopicArn=topic_arn, Protocol="email", Endpoint="ar4038@rit.edu")
+  response = sns.subscribe(TopicArn=topicArn, Protocol="email", Endpoint="ar4038@rit.edu")
   subscription_arn = response["SubscriptionArn"]
 
 def listAllSubscriptions():
@@ -41,6 +41,6 @@ def publishMessage(topicArn):
 
 topicArn = createSNS("topicTest")
 listAllSubscriptions()
-createAnEmailSubscription()
+createAnEmailSubscription(topicArn)
 getAllSubscriptionsByTopic(topicArn)
 publishMessage(topicArn)
