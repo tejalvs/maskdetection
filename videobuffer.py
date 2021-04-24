@@ -215,12 +215,13 @@ if __name__ == '__main__':
         endTime = time.time()
         timeDiff = endTime-startTime
         timeDiff = round(timeDiff,2)
+        print(safetyStatus)
         if(safetyStatus):
             avgTimeWhenEveyoneWearsMasks += timeDiff
-            avgTimeWhenEveyoneWearsMasks = avgTimeWhenEveyoneWearsMasks/2
+            avgTimeWhenEveyoneWearsMasks = round(avgTimeWhenEveyoneWearsMasks/2,2)
         else:
             avgTimeWhenEveryoneDoesntWearsMasks += timeDiff
-            avgTimeWhenEveryoneDoesntWearsMasks = avgTimeWhenEveryoneDoesntWearsMasks/2
+            avgTimeWhenEveryoneDoesntWearsMasks = round(avgTimeWhenEveryoneDoesntWearsMasks/2,2)
         print(timeDiff,momentum,avgTimeWhenEveyoneWearsMasks,avgTimeWhenEveryoneDoesntWearsMasks)
         hyperParam = 0.2
         momentum = (hyperParam * momentum) + ((1 - hyperParam) * round(timeDiff,1))
