@@ -79,11 +79,11 @@ def publishAlertForUnsafeEnviornment(topicArn,msgString,noOfPeopleWithoutMasks):
   publishMessage(topicArn,subject,message)
 
 def processTheDynamoDBVal(ddbJson):
-  strReturn = []
+  strVal = ""
   numberOfPeopleNotWearingMask = 0
   for i in range(len(ddbJson)):
     timeSlotVal = ddbJson[i]
-    if(timeSlotVal["percentOfPeopleWithoutMasks"] > 50):
+    if(timeSlotVal["percentOfPeopleWithoutMasks"] >= 50 and len(timeSlotVal["imagesPaths"]) > 1):
       strVal = str(timeSlotVal["percentOfPeopleWithoutMasks"]) + "% of people were detected not wearing mask at around " + \
       str(round(time.time() - timeSlotVal["percentOfPeopleWithoutMasks"])) + " seconds ago. The image of the people not wearing masks can be obtained here "
       for j in range(len(timeSlotVal["imagesPaths"])):
@@ -98,7 +98,8 @@ def checkForAlertingWhenPeopleAreNotWearingMasks(topicArn):
     print("fetchTime",lastSavedTime,"currTime",time.time())
     dynaDBVal = fetchPeopleWithoutMaskDetails(round(lastSavedTime))
     messageString, totalNumberOfPeople = processTheDynamoDBVal(dynaDBVal)
-    publishAlertForUnsafeEnviornment(topicArn,messageString,totalNumberOfPeople)
+    if(messageString != ""):
+      publishAlertForUnsafeEnviornment(topicArn,messageString,totalNumberOfPeople)
     lastSavedTime = time.time()
     time.sleep(10)
 
