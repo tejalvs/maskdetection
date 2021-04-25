@@ -31,9 +31,8 @@ def getAllSubscriptionsByTopic(topicArn):
 
 def publishMessage(topicArn,subject,message):
   global sns
-  sns.publish(TopicArn=topicArn, 
-              Message=message, 
-              Subject=subject)
+  response = sns.publish(TopicArn=topicArn,Message=message,Subject=subject)
+  print(response)
 
 def checkIfTopicAndSubscriptionExists():
   global sns
@@ -47,7 +46,6 @@ def checkIfTopicAndSubscriptionExists():
        topicArn = tArn
   if(topicArn == ""):
     topicArn = createTopic(topicName)
-  print(topicArn)
   subs = getAllSubscriptionsByTopic(topicArn)
   subscribersRequired = subscribers[:]
   for i in range(len(subs)):
