@@ -6,7 +6,7 @@ import time
 sns = None
 
 topicName = "WegmansMailNotification"
-subscribers = ["ar4038@rit.edu","ts8583@rit.edu"]
+subscribers = ["ar4038@rit.edu","ts8583@rit.edu", "as2463@rit.edu"]
 
 def createTopic(topicName):
   global sns
@@ -93,7 +93,7 @@ def processTheDynamoDBVal(ddbJson):
   return strVal,numberOfPeopleNotWearingMask
   
 def checkForAlertingWhenPeopleAreNotWearingMasks(topicArn):
-  lastSavedTime = 1619244737-10
+  lastSavedTime = time.time()-10
   while(True):
     print("fetchTime",lastSavedTime,"currTime",time.time())
     dynaDBVal = fetchPeopleWithoutMaskDetails(round(lastSavedTime))
