@@ -196,10 +196,11 @@ def captureImage(checkAndSaveMasks):
     safe = True
     precentageOfPeopleNotWearingMask = 0
     if(len(peopleWithoutMasks) > 0):
-        if (len(peopleWithoutMasks)/len(response['Persons'])) >= 0.5 :
+        if (len(peopleWithoutMasks)/len(response['Persons'])) >= 0.0 :
             safe = False
         saveImagesOfPeopleWithoutMasks(peopleWithoutMasks,len(peopleWithoutMasks)/len(response['Persons'])*100)
-    precentageOfPeopleNotWearingMask = (numberOfPeopleWithNoMask/len(response['Persons']))*100
+    if(len(response['Persons'])>0):
+        precentageOfPeopleNotWearingMask = (numberOfPeopleWithNoMask/len(response['Persons']))*100
     frame = changeBackgroundColour(frame,safe,precentageOfPeopleNotWearingMask)
     cv2.imwrite("peopleWithBoundingBoxes.jpg", frame)
     putImageInBucket()
