@@ -78,7 +78,7 @@ def publishAlertForUnsafeEnviornment(topicArn,msgString,noOfPeopleWithoutMasks):
   publishMessage(topicArn,subject,message)
 
 def processTheDynamoDBVal(ddbJson):
-  strVal = ""
+  strVal = "This is an automated mail.\n\n"
   numberOfPeopleNotWearingMask = 0
   for i in range(len(ddbJson)):
     timeSlotVal = ddbJson[i]
@@ -88,7 +88,8 @@ def processTheDynamoDBVal(ddbJson):
       for j in range(len(timeSlotVal["imagesPaths"])):
         numberOfPeopleNotWearingMask+=1
         strVal = strVal + "\n\t https://"+timeSlotVal["s3BucketName"]+".s3.amazonaws.com/"+timeSlotVal["imagesPaths"][j]
-  strVal =  strVal + "\n\n\n There is a chance for the photos not to be accurate please verify the same before taking any action."
+  if(numberOfPeopleNotWearingMask > 0):
+    strVal =  strVal + "\n\n\n There is a chance for the photos not to be accurate please verify the same before taking any action."
   return strVal,numberOfPeopleNotWearingMask
   
 def checkForAlertingWhenPeopleAreNotWearingMasks(topicArn):
@@ -97,7 +98,7 @@ def checkForAlertingWhenPeopleAreNotWearingMasks(topicArn):
     print("fetchTime",lastSavedTime,"currTime",time.time())
     dynaDBVal = fetchPeopleWithoutMaskDetails(round(lastSavedTime))
     messageString, totalNumberOfPeople = processTheDynamoDBVal(dynaDBVal)
-    if(messageString != ""):
+    if(numberOfPeopleNotWearingMask > 0):
       publishAlertForUnsafeEnviornment(topicArn,messageString,totalNumberOfPeople)
     lastSavedTime = time.time()
     time.sleep(10)
