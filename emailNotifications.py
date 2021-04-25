@@ -1,6 +1,7 @@
 import boto3
 from dynamodb_json import json_util as json
 from boto3.dynamodb.conditions import Attr
+import time
 
 sns = None
 
@@ -58,11 +59,11 @@ def checkIfTopicAndSubscriptionExists():
     createAnEmailSubscription(topicArn,subscribersRequired[i])
   return topicArn
 
-def fetchPeopleWithoutMaskDetails():
+def fetchPeopleWithoutMaskDetails(fromTime):
   dynamodb = boto3.resource('dynamodb', region_name="us-east-1")
   table = dynamodb.Table('NotWornMask')
   response = table.scan(
-    FilterExpression=Attr('time').gt(1619240254)
+    FilterExpression=Attr('time').gt(fromTime)
   )
   dynamodb_json = json.dumps(response['Items'])
   dynamodb_json = json.loads(dynamodb_json)
@@ -74,9 +75,16 @@ def publishAlertForUnsafeEnviornment(topicArn):
   message = "Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test"
   publishMessage(topicArn,subject,message)
 
+def checkForAlertingWhenPeopleAreNotWearingMasks():
+  lastSavedTime = time.time()-10
+  while(True):
+    print("fetchTime",lastSavedTime,"currTime",time.time())
+    dynaDBVal = fetchPeopleWithoutMaskDetails(lastSavedTime)
+    lastSavedTime = time.time()
+    time.sleep(10)
+
 if __name__ == '__main__':
-  val = fetchPeopleWithoutMaskDetails()
-  print(val)
   #   topicArn = checkIfTopicAndSubscriptionExists()
   #   publishAlertForUnsafeEnviornment(topicArn)
+  checkForAlertingWhenPeopleAreNotWearingMasks()
       
