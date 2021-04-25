@@ -1,4 +1,5 @@
 import boto3
+from dynamodb_json import json_util as json
 from boto3.dynamodb.conditions import Attr
 
 sns = None
@@ -63,7 +64,8 @@ def fetchPeopleWithoutMaskDetails():
   response = table.scan(
     FilterExpression=Attr('time').gt(1619240254)
   )
-  return response['Items']
+  dynamodb_json = json.dumps(response['Items'])
+  return dynamodb_json
 
 
 def publishAlertForUnsafeEnviornment(topicArn):
