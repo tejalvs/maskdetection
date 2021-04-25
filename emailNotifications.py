@@ -78,7 +78,7 @@ def publishAlertForUnsafeEnviornment(topicArn,msgString,noOfPeopleWithoutMasks):
   publishMessage(topicArn,subject,message)
 
 def processTheDynamoDBVal(ddbJson):
-  strVal = "This is an automated mail.\n\n"
+  strVal = "This is an automated mail.\n"
   numberOfPeopleNotWearingMask = 0
   for i in range(len(ddbJson)):
     timeSlotVal = ddbJson[i]
