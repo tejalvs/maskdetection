@@ -79,7 +79,7 @@ def checkForAlertingWhenPeopleAreNotWearingMasks():
   lastSavedTime = time.time()-10
   while(True):
     print("fetchTime",lastSavedTime,"currTime",time.time())
-    dynaDBVal = fetchPeopleWithoutMaskDetails(lastSavedTime)
+    dynaDBVal = fetchPeopleWithoutMaskDetails(round(lastSavedTime))
     lastSavedTime = time.time()
     time.sleep(10)
 
