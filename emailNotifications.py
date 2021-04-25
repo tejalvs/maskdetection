@@ -75,16 +75,18 @@ def publishAlertForUnsafeEnviornment(topicArn):
   message = "Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test"
   publishMessage(topicArn,subject,message)
 
+def processTheDynamoDBVal(ddbJson):
+  print(ddbJson)
 def checkForAlertingWhenPeopleAreNotWearingMasks():
   lastSavedTime = time.time()-10
   while(True):
     print("fetchTime",lastSavedTime,"currTime",time.time())
     dynaDBVal = fetchPeopleWithoutMaskDetails(round(lastSavedTime))
+    processTheDynamoDBVal(dynaDBVal)
     lastSavedTime = time.time()
     time.sleep(10)
 
 if __name__ == '__main__':
-  #   topicArn = checkIfTopicAndSubscriptionExists()
-  #   publishAlertForUnsafeEnviornment(topicArn)
+  topicArn = checkIfTopicAndSubscriptionExists()
   checkForAlertingWhenPeopleAreNotWearingMasks()
       
