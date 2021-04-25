@@ -70,23 +70,39 @@ def fetchPeopleWithoutMaskDetails(fromTime):
   return dynamodb_json
 
 
-def publishAlertForUnsafeEnviornment(topicArn):
-  subject = "This is a test to see if you are getting messages"
-  message = "Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test"
+def publishAlertForUnsafeEnviornment(topicArn,msgString,noOfPeopleWithoutMasks):
+  if(noOfPeopleWithoutMasks == 1):
+    subject = str(noOfPeopleWithoutMasks) + "person found without mask in the last 10 seconds"
+  else:
+    subject = str(noOfPeopleWithoutMasks) + "people found without mask in the last 10 seconds"
+  message = msgString
   publishMessage(topicArn,subject,message)
 
 def processTheDynamoDBVal(ddbJson):
-  print(ddbJson)
-def checkForAlertingWhenPeopleAreNotWearingMasks():
-  lastSavedTime = time.time()-10
+  strReturn = []
+  numberOfPeopleNotWearingMask = 0
+  for i in range(len(ddbJson)):
+    timeSlotVal = ddbJson[i]
+    if(timeSlotVal["percentOfPeopleWithoutMasks"] > 50):
+      strVal = str(timeSlotVal["percentOfPeopleWithoutMasks"]) + "% of people were detected not wearing mask at around " + \
+      str(round(time.time() - timeSlotVal["percentOfPeopleWithoutMasks"])) + " seconds ago. The image of the people not wearing masks can be obtained here "
+      for j in range(len(timeSlotVal[imagesPaths])):
+        numberOfPeopleNotWearingMask+=1
+        strVal = strVal + "\n\t https://"+timeSlotVal["s3BucketName"]+".s3.amazonaws.com/"+timeSlotVal[imagesPaths][j]
+  strVal =  strVal + "\n\n\n There is a chance for the photos not to be accurate please verify the same before taking any action."
+  return strVal,numberOfPeopleNotWearingMask
+  
+def checkForAlertingWhenPeopleAreNotWearingMasks(topicArn):
+  lastSavedTime = 10-10
   while(True):
     print("fetchTime",lastSavedTime,"currTime",time.time())
     dynaDBVal = fetchPeopleWithoutMaskDetails(round(lastSavedTime))
-    processTheDynamoDBVal(dynaDBVal)
+    messageString, totalNumberOfPeople = processTheDynamoDBVal(dynaDBVal)
+    publishAlertForUnsafeEnviornment(topicArn,messageString,totalNumberOfPeople)
     lastSavedTime = time.time()
     time.sleep(10)
 
 if __name__ == '__main__':
   topicArn = checkIfTopicAndSubscriptionExists()
-  checkForAlertingWhenPeopleAreNotWearingMasks()
+  checkForAlertingWhenPeopleAreNotWearingMasks(topicArn)
       
