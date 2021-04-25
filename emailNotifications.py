@@ -46,7 +46,8 @@ def checkIfTopicAndSubscriptionExists():
     if topicName == topicNames:
        topicArn = tArn
   if(topicArn == ""):
-    createTopic(topicName)
+    topicArn = createTopic(topicName)
+  print(topicArn)
   subs = getAllSubscriptionsByTopic(topicArn)
   subscribersRequired = subscribers[:]
   for i in range(len(subs)):
