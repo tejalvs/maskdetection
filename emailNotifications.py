@@ -1,5 +1,4 @@
 import boto3
-from boto3.dynamodb.conditions import Key 
 
 sns = None
 
@@ -61,7 +60,7 @@ def fetchPeopleWithoutMaskDetails():
   dynamodb = boto3.resource('dynamodb', region_name="us-east-1")
   table = dynamodb.Table('NotWornMask')
   response = table.scan(
-      KeyConditionExpression=Key('time').gt(1619240254)
+    FilterExpression=Attr('time').gt(1619240254)
   )
   return response['Items']
 
