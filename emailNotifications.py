@@ -84,7 +84,7 @@ def processTheDynamoDBVal(ddbJson):
     timeSlotVal = ddbJson[i]
     if(timeSlotVal["percentOfPeopleWithoutMasks"] >= 50 and len(timeSlotVal["imagesPaths"]) > 1):
       strVal = str(timeSlotVal["percentOfPeopleWithoutMasks"]) + "% of people were detected not wearing mask at around " + \
-      str(round(time.time() - timeSlotVal["percentOfPeopleWithoutMasks"])) + " seconds ago. The image of the people not wearing masks can be obtained here "
+      str(round(time.time() - timeSlotVal["time"])) + " seconds ago. The image of the people not wearing masks can be obtained here "
       for j in range(len(timeSlotVal["imagesPaths"])):
         numberOfPeopleNotWearingMask+=1
         strVal = strVal + "\n\t https://"+timeSlotVal["s3BucketName"]+".s3.amazonaws.com/"+timeSlotVal["imagesPaths"][j]
@@ -93,7 +93,7 @@ def processTheDynamoDBVal(ddbJson):
   return strVal,numberOfPeopleNotWearingMask
   
 def checkForAlertingWhenPeopleAreNotWearingMasks(topicArn):
-  lastSavedTime = 10-10
+  lastSavedTime = 1619244737-10
   while(True):
     print("fetchTime",lastSavedTime,"currTime",time.time())
     dynaDBVal = fetchPeopleWithoutMaskDetails(round(lastSavedTime))
