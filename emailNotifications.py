@@ -2,10 +2,11 @@ import boto3
 
 sns = None
 
-def createSNS(topicName):
+topicName = "WegmansMailNotification"
+subscribers = ["ar4038@rit.edu","ts8583@rit.edu"]
+
+def createTopic(topicName):
   global sns
-  sns = boto3.client("sns", 
-                     region_name="us-east-1")
   response = sns.create_topic(Name=topicName)
   topicArn = response["TopicArn"]
   return topicArn
@@ -14,34 +15,52 @@ def listAllTopics():
   global sns
   response = sns.list_topics()
   topics = response["Topics"]
-  print("topics ",topics)
+  return topics
 
-def createAnEmailSubscription(topicArn):
+def createAnEmailSubscription(topicArn,emailID):
   global sns
-  response = sns.subscribe(TopicArn=topicArn, Protocol="email", Endpoint="ar4038@rit.edu")
+  response = sns.subscribe(TopicArn=topicArn, Protocol="email", Endpoint=emailID)
   subscription_arn = response["SubscriptionArn"]
-
-def listAllSubscriptions():
-  global sns
-  response = sns.list_subscriptions()
-  subscriptions = response["Subscriptions"]
-  print("all subscriptions",subscriptions)
+  return subscription_arn
 
 def getAllSubscriptionsByTopic(topicArn):
   global sns
   response = sns.list_subscriptions_by_topic(TopicArn=topicArn)
   subscriptions = response["Subscriptions"]
-  print("all subscriptions by topic",subscriptions)
+  return subscriptions
 
-def publishMessage(topicArn):
+def publishMessage(topicArn,subject,message):
   global sns
   sns.publish(TopicArn=topicArn, 
-              Message="message text", 
-              Subject="subject used in emails only")
+              Message=subject, 
+              Subject=message)
 
-topicArn = createSNS("topicTest")
-listAllTopics()
-listAllSubscriptions()
-# createAnEmailSubscription(topicArn)
-getAllSubscriptionsByTopic(topicArn)
-publishMessage(topicArn)
+def checkIfTopicAndSubscriptionExists():
+  global sns
+  topicArn = ""
+  sns = boto3.client("sns", region_name="us-east-1")
+  topics = listAllTopics()
+  for i in range(len(topics)):
+    tArn = topics[i]["TopicArn"]
+    topicNames = tArn.split(":")[5]
+    if topicName == topicNames:
+       topicArn = tArn
+  if(topicArn == ""):
+    createTopic(topicName)
+  subs = getAllSubscriptionsByTopic(topicArn)
+  subscribersRequired = subscribers[:]
+  for i in range(len(subs)):
+    subEmail = subs[i]["Endpoint"]
+    if subEmail in subscribersRequired:
+      subscribersRequired.remove(subEmail)
+  for i in range(len(subscribersRequired)):
+    createAnEmailSubscription(topicArn,subscribersRequired[i])
+  return topicArn
+
+def publishAlertForUnsafeEnviornment(topicArn):
+  subject = "This is a test to see if you are getting messages"
+  message = "Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test"
+  publishMessage(topicArn,subject,message)
+
+topicArn = checkIfTopicAndSubscriptionExists()
+publishAlertForUnsafeEnviornment(topicArn)
