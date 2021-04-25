@@ -65,7 +65,7 @@ def fetchPeopleWithoutMaskDetails():
     FilterExpression=Attr('time').gt(1619240254)
   )
   dynamodb_json = json.dumps(response['Items'])
-  json.loads(dynamodb_json)
+  dynamodb_json = json.loads(dynamodb_json)
   return dynamodb_json
 
 
