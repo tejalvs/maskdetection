@@ -6,7 +6,7 @@ import time
 sns = None
 
 topicName = "WegmansMailNotification"
-subscribers = ["ar4038@rit.edu","ts8583@rit.edu", "as2463@rit.edu"]
+subscribers = ["ar4038@rit.edu","ts8583@rit.edu", "as2462@rit.edu"]
 
 def createTopic(topicName):
   global sns
