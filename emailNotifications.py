@@ -32,8 +32,8 @@ def getAllSubscriptionsByTopic(topicArn):
 def publishMessage(topicArn,subject,message):
   global sns
   sns.publish(TopicArn=topicArn, 
-              Message=subject, 
-              Subject=message)
+              Message=message, 
+              Subject=subject)
 
 def checkIfTopicAndSubscriptionExists():
   global sns
@@ -63,5 +63,7 @@ def publishAlertForUnsafeEnviornment(topicArn):
   message = "Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test"
   publishMessage(topicArn,subject,message)
 
-topicArn = checkIfTopicAndSubscriptionExists()
-publishAlertForUnsafeEnviornment(topicArn)
+if __name__ == '__main__':
+  topicArn = checkIfTopicAndSubscriptionExists()
+  publishAlertForUnsafeEnviornment(topicArn)
+      
