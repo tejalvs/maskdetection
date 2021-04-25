@@ -71,9 +71,9 @@ def fetchPeopleWithoutMaskDetails(fromTime):
 
 def publishAlertForUnsafeEnviornment(topicArn,msgString,noOfPeopleWithoutMasks):
   if(noOfPeopleWithoutMasks == 1):
-    subject = str(noOfPeopleWithoutMasks) + " person found without mask in the last 10 seconds"
+    subject = str(noOfPeopleWithoutMasks) + "  person found without mask in the last 10 seconds"
   else:
-    subject = str(noOfPeopleWithoutMasks) + " people found without mask in the last 10 seconds"
+    subject = str(noOfPeopleWithoutMasks) + "  people found without mask in the last 10 seconds"
   message = msgString
   publishMessage(topicArn,subject,message)
 
