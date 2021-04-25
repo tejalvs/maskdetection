@@ -35,7 +35,6 @@ def getAllSubscriptionsByTopic(topicArn):
 def publishMessage(topicArn,subject,message):
   global sns
   response = sns.publish(TopicArn=topicArn,Message=message,Subject=subject)
-  print(response)
 
 def checkIfTopicAndSubscriptionExists():
   global sns
