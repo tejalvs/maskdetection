@@ -228,7 +228,7 @@ if __name__ == '__main__':
         else:
             avgTimeWhenEveryoneDoesntWearsMasks += timeDiff
             avgTimeWhenEveryoneDoesntWearsMasks = round(avgTimeWhenEveryoneDoesntWearsMasks/2,2)
-        print(timeDiff,momentum,avgTimeWhenEveyoneWearsMasks,avgTimeWhenEveryoneDoesntWearsMasks)
+        print(timeDiff,momentum)
         hyperParam = 0.2
         momentum = (hyperParam * momentum) + ((1 - hyperParam) * round(timeDiff,1))
         momentum = round(momentum,2) + (avgTimeWhenEveryoneDoesntWearsMasks-avgTimeWhenEveyoneWearsMasks)
