@@ -135,8 +135,9 @@ def changeBackgroundColour(img,safe,precentageOfPeopleNotWearingMask):
     textLocation = (15, h)
     base = cv2.putText(base, "People Not Wearing Mask: "+ str(round(precentageOfPeopleNotWearingMask,2))+"%", \
                        textLocation, cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1, cv2.LINE_AA)
-    now = datetime.now(timezone('EST'))
-    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+    estTime = datetime.now(timezone('EST'))
+    edtTime = estTime + datetime.timedelta(hours = 1)
+    dt_string = edtTime.strftime("%d/%m/%Y %H:%M:%S")
     timeLocation = (15, 15)
     base = cv2.putText(base, str(dt_string), \
                        timeLocation, cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1, cv2.LINE_AA)
