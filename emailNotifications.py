@@ -98,7 +98,7 @@ def checkForAlertingWhenPeopleAreNotWearingMasks(topicArn):
     print("fetchTime",lastSavedTime,"currTime",time.time())
     dynaDBVal = fetchPeopleWithoutMaskDetails(round(lastSavedTime))
     messageString, totalNumberOfPeople = processTheDynamoDBVal(dynaDBVal)
-    if(numberOfPeopleNotWearingMask > 0):
+    if(totalNumberOfPeople > 0):
       publishAlertForUnsafeEnviornment(topicArn,messageString,totalNumberOfPeople)
     lastSavedTime = time.time()
     time.sleep(10)
