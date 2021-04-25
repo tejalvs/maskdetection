@@ -196,7 +196,6 @@ def captureImage(checkAndSaveMasks):
             cap.release()
     precentageOfPeopleNotWearingMask = 0
     if(len(peopleWithoutMasks) > 0):
-        if (len(peopleWithoutMasks)/len(response['Persons'])) >= 0.0 :
         saveImagesOfPeopleWithoutMasks(peopleWithoutMasks,len(peopleWithoutMasks)/len(response['Persons'])*100)
     if(len(response['Persons'])>0):
         precentageOfPeopleNotWearingMask = (numberOfPeopleWithNoMask/len(response['Persons']))*100
