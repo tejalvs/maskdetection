@@ -82,7 +82,7 @@ def processTheDynamoDBVal(ddbJson):
   numberOfPeopleNotWearingMask = 0
   for i in range(len(ddbJson)):
     timeSlotVal = ddbJson[i]
-    if(timeSlotVal["percentOfPeopleWithoutMasks"] >= 50 and len(timeSlotVal["imagesPaths"]) > 1):
+    if(timeSlotVal["percentOfPeopleWithoutMasks"] >= 50):
       strVal = str(timeSlotVal["percentOfPeopleWithoutMasks"]) + "% of people were detected not wearing mask at around " + \
       str(round(time.time() - timeSlotVal["time"])) + " seconds ago. The image of the people not wearing masks can be obtained here "
       for j in range(len(timeSlotVal["imagesPaths"])):
