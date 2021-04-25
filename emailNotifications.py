@@ -1,4 +1,5 @@
 import boto3
+from boto3.dynamodb.conditions import Key 
 
 sns = None
 
@@ -56,12 +57,23 @@ def checkIfTopicAndSubscriptionExists():
     createAnEmailSubscription(topicArn,subscribersRequired[i])
   return topicArn
 
+def fetchPeopleWithoutMaskDetails():
+  dynamodb = boto3.resource('dynamodb', region_name="us-east-1")
+  table = dynamodb.Table('NotWornMask')
+  response = table.scan(
+      KeyConditionExpression=Key('time').gt(1619240254)
+  )
+  return response['Items']
+
+
 def publishAlertForUnsafeEnviornment(topicArn):
   subject = "This is a test to see if you are getting messages"
   message = "Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test"
   publishMessage(topicArn,subject,message)
 
 if __name__ == '__main__':
-  topicArn = checkIfTopicAndSubscriptionExists()
-  publishAlertForUnsafeEnviornment(topicArn)
+  val = fetchPeopleWithoutMaskDetails()
+  print(val)
+  #   topicArn = checkIfTopicAndSubscriptionExists()
+  #   publishAlertForUnsafeEnviornment(topicArn)
       
