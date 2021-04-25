@@ -40,6 +40,7 @@ def publishMessage(topicArn):
               Subject="subject used in emails only")
 
 topicArn = createSNS("topicTest")
+listAllTopics()
 listAllSubscriptions()
 # createAnEmailSubscription(topicArn)
 getAllSubscriptionsByTopic(topicArn)
