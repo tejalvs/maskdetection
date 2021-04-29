@@ -6,7 +6,7 @@ import time
 sns = None
 
 topicName = "WegmansMailNotification"
-subscribers = ["ar4038@rit.edu","ts8583@rit.edu", "as2462@rit.edu"]
+subscribers = []
 
 def createTopic(topicName):
   global sns
@@ -37,7 +37,7 @@ def publishMessage(topicArn,subject,message):
   response = sns.publish(TopicArn=topicArn,Message=message,Subject=subject)
 
 def checkIfTopicAndSubscriptionExists():
-  global sns
+  global sns,subscribers,topicName
   topicArn = ""
   sns = boto3.client("sns", region_name="us-east-1")
   topics = listAllTopics()
@@ -103,7 +103,16 @@ def checkForAlertingWhenPeopleAreNotWearingMasks(topicArn):
     lastSavedTime = time.time()
     time.sleep(10)
 
+def askUserForMailAdresses():
+  global subscribers
+  num = input("How many email ID are to be added?")
+  num = int(num)
+  for i in range(num):
+    emailID = input("Enter mail ID of person " + str(i))
+    subscribers.append(emailID)
+
 if __name__ == '__main__':
+  askUserForMailAdresses()
   topicArn = checkIfTopicAndSubscriptionExists()
   checkForAlertingWhenPeopleAreNotWearingMasks(topicArn)
       
