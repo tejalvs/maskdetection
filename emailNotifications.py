@@ -108,7 +108,7 @@ def askUserForMailAdresses():
   num = input("How many email ID are to be added?")
   num = int(num)
   for i in range(num):
-    emailID = input("Enter mail ID of person " + str(i))
+    emailID = input("Enter mail ID of person " + str(i+1) +" : ")
     subscribers.append(emailID)
 
 if __name__ == '__main__':
